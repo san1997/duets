@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
 import * as firebase from 'firebase';
+
+import HomePage from './components/homepage';
 
 // Optionally import the services that you want to use
 //import "firebase/auth";
@@ -34,18 +35,6 @@ export default function App() {
     ans = snapshot;
   });
   return (
-    <View style={styles.container}>
-      <Text>{`App.js is the main${JSON.stringify(ans)} file here!`}</Text>
-      <StatusBar style="auto" />
-    </View>
+    <HomePage />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
