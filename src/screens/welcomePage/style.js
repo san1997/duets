@@ -1,6 +1,6 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
-export const HomePageStyles = styled.View`
+export const WelcomePageStyles = styled.View`
   flex: 1;
   background-color: #fff;
   align-items: center;
