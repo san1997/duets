@@ -3,6 +3,9 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
+
 import * as firebase from "firebase";
 
 /* to ignore the timer warning */
@@ -15,6 +18,11 @@ console.warn = (message) => {
   if (message.indexOf("Setting a timer") <= -1) {
     _console.warn(message);
   }
+};
+
+/* Loading fonts */
+let customFonts = {
+  "SourceSansPro-Regular": require("./src/assets/fonts/SourceSansPro-Regular.ttf"),
 };
 
 /* Load Screens here */
@@ -46,24 +54,43 @@ var database = firebase.database();
 
 const Stack = createStackNavigator();
 
-export default function App() {
-  const temp = "test1";
-  let ans = "start";
-  var starCountRef = firebase.database().ref("user");
-  starCountRef.on("value", function (snapshot) {
-    ans = snapshot;
-  });
+export default class App extends React.Component {
+  state = {
+    fontsLoaded: false,
+  };
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="WelcomePage"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="WelcomePage" component={WelcomePage} />
-        <Stack.Screen name="LoginPage" component={LoginPage} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  async _loadFontsAsync() {
+    await Font.loadAsync(customFonts);
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this._loadFontsAsync();
+  }
+
+  render() {
+    if (this.state.fontsLoaded) {
+      const temp = "test1";
+      let ans = "start";
+      var starCountRef = firebase.database().ref("user");
+      starCountRef.on("value", function (snapshot) {
+        ans = snapshot;
+      });
+
+      return (
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="WelcomePage"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="WelcomePage" component={WelcomePage} />
+            <Stack.Screen name="LoginPage" component={LoginPage} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    } else {
+      return <AppLoading />;
+    }
+  }
 }
