@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import * as firebase from "firebase";
 
 /* to ignore the timer warning */
@@ -17,6 +19,8 @@ console.warn = (message) => {
 
 /* Load Screens here */
 import WelcomePage from "./src/screens/welcomePage";
+import LoginPage from "./src/screens/loginPage";
+import HomeScreen from "./src/screens/homeScreen";
 
 /*Optionally import the services that you want to use */
 //import "firebase/auth";
@@ -40,6 +44,8 @@ if (!firebase.apps.length) {
 
 var database = firebase.database();
 
+const Stack = createStackNavigator();
+
 export default function App() {
   const temp = "test1";
   let ans = "start";
@@ -47,5 +53,17 @@ export default function App() {
   starCountRef.on("value", function (snapshot) {
     ans = snapshot;
   });
-  return <WelcomePage />;
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="WelcomePage"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="WelcomePage" component={WelcomePage} />
+        <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
