@@ -5,4 +5,5 @@ export default {
   signupHeading: "Sign Up for Free",
   orHeading: "───────────     OR     ───────────",
   forgotPass: "Forgot password?",
+  continue: "Continue",
 };
