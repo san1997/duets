@@ -8,24 +8,15 @@ export const LoginPageStyles = styled.View`
   flex: 1;
   background-color: #fff;
   align-items: center;
-  justify-content: center;
-`;
-
-export const Title = styled.Text`
-  color: #222;
-  text-align: center;
-  font-size: 20px;
-  margin-top: 30px;
-`;
-
-export const Logo = styled.Image`
-  width: 150px;
-  height: 150px;
 `;
 
 export const loginStyles = StyleSheet.create({
+  LoginPageStyles: {
+    flex: 1,
+    backgroundColor: colors.white,
+    alignItems: "center",
+  },
   logoContainer: {
-    position: "absolute",
     width: "70%",
     top: "10%",
     alignItems: "center",
@@ -35,14 +26,13 @@ export const loginStyles = StyleSheet.create({
     height: 80,
   },
   loginText: {
-    top: "12%",
+    top: "10%",
     textAlign: "center",
     fontFamily: fonts.regular_text,
     color: colors.grey,
   },
   loginHeadingContainer: {
-    position: "absolute",
-    top: "30%",
+    top: "15%",
     backgroundColor: colors.backgroundLight,
     width: "100%",
     height: "5%",
@@ -54,25 +44,37 @@ export const loginStyles = StyleSheet.create({
     fontSize: 18,
   },
   loginFormContainer: {
-    position: "absolute",
     width: "100%",
-    top: "40%",
+    top: "20%",
     alignItems: "center",
   },
   loginForminput: {
-    width: "75%",
-    padding: 8,
+    width: "80%",
+    padding: 6,
     borderWidth: 1,
     borderColor: colors.borderLightColor,
     borderRadius: 7,
     marginBottom: 15,
     textAlign: "center",
     fontFamily: fonts.regular_text,
+    fontSize: 14,
+  },
+  continueContainer: {
+    width: "80%",
+    padding: 11,
+    borderWidth: 1,
+    borderRadius: 7,
+    alignItems: "center",
+    top: "20%",
+    borderColor: colors.borderLightColor,
+  },
+  continueDiv: {
+    color: colors.textLightColor,
+    fontFamily: fonts.regular_text,
   },
   forgotPassContainer: {
-    position: "absolute",
     width: "75%",
-    top: "55%",
+    top: "21%",
     marginTop: 3,
     alignItems: "flex-end",
   },
@@ -81,8 +83,7 @@ export const loginStyles = StyleSheet.create({
     fontFamily: fonts.regular_text,
   },
   orDivContainer: {
-    position: "absolute",
-    top: "65%",
+    top: "25%",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -93,8 +94,7 @@ export const loginStyles = StyleSheet.create({
     color: colors.borderLightColor,
   },
   signupHeadingContainer: {
-    position: "absolute",
-    top: "70%",
+    top: "27%",
     backgroundColor: colors.backgroundLight,
     width: "100%",
     height: "5%",
@@ -106,7 +106,9 @@ export const loginStyles = StyleSheet.create({
     fontSize: 18,
   },
   goToHomeButton: {
-    position: "absolute",
-    top: "90%",
+    top: "45%",
+  },
+  flex_row: {
+    flexDirection: "row",
   },
 });
