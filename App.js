@@ -27,7 +27,8 @@ let customFonts = {
 
 /* Load Screens here */
 import WelcomePage from "./src/screens/welcomePage";
-import LoginPage from "./src/screens/loginPage";
+import LoginPage from "./src/screens/loginScreens/loginPage";
+import PasswordPage from "./src/screens/loginScreens/passwordPage";
 import HomeScreen from "./src/screens/homeScreen";
 
 /*Optionally import the services that you want to use */
@@ -85,6 +86,7 @@ export default class App extends React.Component {
           >
             <Stack.Screen name="WelcomePage" component={WelcomePage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
+            <Stack.Screen name="PasswordPage" component={PasswordPage} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
           </Stack.Navigator>
         </NavigationContainer>

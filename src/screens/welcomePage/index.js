@@ -12,7 +12,6 @@ class WelcomePage extends React.Component {
   }
   render() {
     return (
-      // <HomeScreen />
       <WelcomePageStyles>
         <Logo source={logoImage}></Logo>
         <Title>Welcome to Duet</Title>
