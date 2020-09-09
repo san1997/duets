@@ -11,21 +11,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/EvilIcons";
 
-import strings from "../../constConfig/strings";
-import colors from "../../constConfig/colors";
-import images from "../../constConfig/images";
+import strings from "../../../constConfig/strings";
+import colors from "../../../constConfig/colors";
+import images from "../../../constConfig/images";
 
 import { LoginPageStyles, loginStyles } from "./style.js";
-
-function GoToButton({ screenName }) {
-  const navigation = useNavigation();
-  return (
-    <Button
-      title={`Go to ${screenName}`}
-      onPress={() => navigation.navigate(screenName)}
-    />
-  );
-}
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -37,6 +27,7 @@ class LoginPage extends React.Component {
       textSize: 14,
       directionArrowSize: 20,
       directionArrowColor: colors.textLightColor,
+      logDetails: "",
     };
   }
 
@@ -67,6 +58,7 @@ class LoginPage extends React.Component {
                     textSize: 16,
                     directionArrowSize: 25,
                     directionArrowColor: colors.black,
+                    logDetails: inputText,
                   });
                 } else {
                   this.setState({
@@ -76,6 +68,7 @@ class LoginPage extends React.Component {
                     textSize: 14,
                     directionArrowSize: 20,
                     directionArrowColor: colors.textLightColor,
+                    logDetails: "",
                   });
                 }
               }}
@@ -89,6 +82,11 @@ class LoginPage extends React.Component {
               loginStyles.continueContainer,
               { backgroundColor: this.state.continueBackColor },
             ]}
+            onPress={() =>
+              this.props.navigation.navigate("PasswordPage", {
+                userDetails: this.state.logDetails,
+              })
+            }
           >
             <View style={loginStyles.flex_row}>
               <Text
@@ -125,10 +123,6 @@ class LoginPage extends React.Component {
               {strings.signupHeading}
             </Text>
           </TouchableOpacity>
-
-          <View style={loginStyles.goToHomeButton}>
-            <GoToButton screenName="HomeScreen" />
-          </View>
         </LoginPageStyles>
       </SafeAreaView>
     );

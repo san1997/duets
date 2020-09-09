@@ -6,4 +6,7 @@ export default {
   orHeading: "───────────     OR     ───────────",
   forgotPass: "Forgot password?",
   continue: "Continue",
+  welcome: "Welcome",
+  enterPass: "Enter Password",
+  loginButtonText: "Log in",
 };

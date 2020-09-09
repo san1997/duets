@@ -7,4 +7,5 @@ export default {
   borderLightColor: "#e0e0e0",
   textLightColor: "#9e9e9e",
   linkColor: "#4997d0",
+  backgroundGrey: "#f5f5f5",
 };

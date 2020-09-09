@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 
-import colors from "../../constConfig/colors";
-import fonts from "../../constConfig/fonts";
+import colors from "../../../constConfig/colors";
+import fonts from "../../../constConfig/fonts";
 
 export const LoginPageStyles = styled.View`
   flex: 1;
@@ -104,9 +104,6 @@ export const loginStyles = StyleSheet.create({
   signupHeading: {
     fontFamily: fonts.regular_text,
     fontSize: 18,
-  },
-  goToHomeButton: {
-    top: "45%",
   },
   flex_row: {
     flexDirection: "row",
