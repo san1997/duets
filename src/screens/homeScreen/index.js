@@ -16,7 +16,9 @@ class HomeScreen extends React.Component {
         index={1}>
         <UploadScreen/>
         <FeedScreen/>
-        <ProfileScreen/>
+        <ProfileScreen
+          userId={'lDjbCXZC02bECatjaiyFRDr08SN2'}
+        />
       </Swiper>
     )
   }
