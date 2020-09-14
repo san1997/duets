@@ -31,6 +31,12 @@ class LoginPage extends React.Component {
     };
   }
 
+  switchToPasswordPage() {
+    this.props.navigation.navigate("PasswordPage", {
+      userDetails: this.state.logDetails,
+    })
+  }
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -82,10 +88,7 @@ class LoginPage extends React.Component {
               loginStyles.continueContainer,
               { backgroundColor: this.state.continueBackColor },
             ]}
-            onPress={() =>
-              this.props.navigation.navigate("PasswordPage", {
-                userDetails: this.state.logDetails,
-              })
+            onPress={() => this.switchToPasswordPage()
             }
           >
             <View style={loginStyles.flex_row}>

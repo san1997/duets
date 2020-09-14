@@ -15,6 +15,7 @@ import Arrow_Icon from "react-native-vector-icons/EvilIcons";
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
 import images from "../../../constConfig/images";
+import { SERVER } from "../../../constConfig/config";
 
 import { PasswordPageStyles, passwordPageStyles } from "./style.js";
 import { color } from "react-native-reanimated";
@@ -37,7 +38,32 @@ class LoginPage extends React.Component {
       loginbuttonTextColor: colors.textLightColor,
       loginbuttonBackColor: colors.white,
       loginDisable: true,
+      password: ""
     };
+  }
+
+  loginUser(id, password) {
+    const data = {
+      id,
+      password
+    };
+    fetch(`${SERVER}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(res => {
+      console.log('response here', res);
+      if (!res.error) {
+        this.props.navigation.navigate("HomeScreen");
+      } else {
+
+      }
+    })
+    .catch(err => {
+      console.log('error here', err);
+    })
   }
 
   render() {
@@ -83,6 +109,7 @@ class LoginPage extends React.Component {
                     loginbuttonTextColor: colors.black,
                     loginbuttonBackColor: colors.backgroundGrey,
                     loginDisable: false,
+                    password: inputText
                   });
                 } else {
                   this.setState({
@@ -106,7 +133,7 @@ class LoginPage extends React.Component {
               passwordPageStyles.loginHeadingContainer,
               { backgroundColor: this.state.loginbuttonBackColor },
             ]}
-            onPress={() => this.props.navigation.navigate("HomeScreen")}
+            onPress={() => this.loginUser(this.props.route.params.userDetails, this.state.password)}
             disabled={this.state.loginDisable}
           >
             <View style={{ flexDirection: "row" }}>

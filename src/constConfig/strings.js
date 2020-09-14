@@ -8,5 +8,5 @@ export default {
   continue: "Continue",
   welcome: "Welcome",
   enterPass: "Enter Password",
-  loginButtonText: "Log in",
+  loginButtonText: "Log In",
 };
