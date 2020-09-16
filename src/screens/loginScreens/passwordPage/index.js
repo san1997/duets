@@ -38,7 +38,8 @@ class LoginPage extends React.Component {
       loginbuttonTextColor: colors.textLightColor,
       loginbuttonBackColor: colors.white,
       loginDisable: true,
-      password: ""
+      password: "",
+      wrongPassword: false
     };
   }
 
@@ -58,12 +59,39 @@ class LoginPage extends React.Component {
       if (!res.error) {
         this.props.navigation.navigate("HomeScreen");
       } else {
-
+        if (res.error === strings.INCORRECT_PASSWORD) {
+          console.log('pass was wrong');
+          this.setState({
+            wrongPassword: true,
+            loginbuttonTextColor: colors.textLightColor,
+            loginbuttonBackColor: colors.white,
+            loginDisable: true,
+          })
+        }
       }
     })
     .catch(err => {
       console.log('error here', err);
     })
+  }
+
+  handlePassChange(inputText) {
+    {
+      if (inputText != "") {
+        this.setState({
+          loginbuttonTextColor: colors.black,
+          loginbuttonBackColor: colors.backgroundGrey,
+          loginDisable: false,
+          password: inputText,
+        });
+      } else {
+        this.setState({
+          loginbuttonTextColor: colors.textLightColor,
+          loginbuttonBackColor: colors.white,
+          loginDisable: true,
+        });
+      }
+    }
   }
 
   render() {
@@ -98,27 +126,13 @@ class LoginPage extends React.Component {
 
           <View style={passwordPageStyles.passwordFormContainer}>
             <TextInput
-              placeholder={strings.enterPass}
-              placeholderTextColor={colors.textLightColor}
+              placeholder={this.state.wrongPassword ? strings.wrongPassword : strings.enterPass}
+              placeholderTextColor={this.state.wrongPassword ? colors.red : colors.textLightColor}
               secureTextEntry={true}
               underlineColorAndroid="transparent"
               style={passwordPageStyles.loginForminput}
-              onChangeText={(inputText) => {
-                if (inputText != "") {
-                  this.setState({
-                    loginbuttonTextColor: colors.black,
-                    loginbuttonBackColor: colors.backgroundGrey,
-                    loginDisable: false,
-                    password: inputText
-                  });
-                } else {
-                  this.setState({
-                    loginbuttonTextColor: colors.textLightColor,
-                    loginbuttonBackColor: colors.white,
-                    loginDisable: true,
-                  });
-                }
-              }}
+              onChangeText={(inputText) => this.handlePassChange(inputText)}
+              textAlign="center"
             />
           </View>
 

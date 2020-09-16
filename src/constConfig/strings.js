@@ -9,4 +9,7 @@ export default {
   welcome: "Welcome",
   enterPass: "Enter Password",
   loginButtonText: "Log In",
+  wrongPassword: "You seem to have messed up your password.",
+  INCORRECT_PASSWORD: "INCORRECT_PASSWORD",
+  USER_NOT_FOUND: "USER_NOT_FOUND",
 };
