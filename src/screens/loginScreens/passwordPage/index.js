@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Entypo";
 import Arrow_Icon from "react-native-vector-icons/EvilIcons";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
@@ -48,7 +49,7 @@ class LoginPage extends React.Component {
       id,
       password
     };
-    fetch(`${SERVER}/auth`, {
+    fetch(`${SERVER}/login/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -75,6 +76,29 @@ class LoginPage extends React.Component {
     })
   }
 
+  forgotPasswordClick(id) {
+    const data = {
+      id
+    }
+    fetch(`${SERVER}/login/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(response => {
+      if (response.error) {
+        this.showAlertMessage(strings.forgotPasswordFailure);
+      } else{
+        this.showAlertMessage(strings.forgotPasswordSuccess + response.id);
+      }
+    })
+    .catch(err => {
+      this.showAlertMessage(strings.forgotPasswordFailure);
+      console.log('forgot pass resp', err);
+    })
+  }
+
   handlePassChange(inputText) {
     {
       if (inputText != "") {
@@ -92,6 +116,14 @@ class LoginPage extends React.Component {
         });
       }
     }
+  }
+
+  showAlertMessage(message) {
+    showMessage({
+      message,
+      type: 'info',
+      duration: 3000
+    });
   }
 
   render() {
@@ -136,7 +168,10 @@ class LoginPage extends React.Component {
             />
           </View>
 
-          <TouchableOpacity style={passwordPageStyles.forgotPassContainer}>
+          <TouchableOpacity
+            style={passwordPageStyles.forgotPassContainer}
+            onPress={() => this.forgotPasswordClick(this.props.route.params.userDetails)}
+          >
             <Text style={passwordPageStyles.forgotPassHeading}>
               {strings.forgotPass}
             </Text>
