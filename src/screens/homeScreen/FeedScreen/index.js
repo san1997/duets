@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import AntIcon from "react-native-vector-icons/AntDesign";
+import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
@@ -25,12 +26,12 @@ class FeedScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true }, this.getData);
+    this.setState({ isLoading: false }, this.getData);
   }
 
   getData = async () => {
     const url =
-      "https://jsonplaceholder.typicode.com/photos?_limit=3&_page=" +
+      "https://jsonplaceholder.typicode.com/photos?_limit=10&_page=" +
       this.state.page;
     fetch(url)
       .then((response) => response.json())
@@ -135,6 +136,7 @@ class FeedScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={feedPageStyles.androidSafeArea}>
+        {/* Duets Feed page header */}
         <View style={feedPageStyles.feedPageContainer}>
           <View style={[feedPageStyles.headerContainer]}>
             <View style={feedPageStyles.flex_row}>
@@ -152,15 +154,42 @@ class FeedScreen extends React.Component {
             </View>
           </View>
 
+          {/* Duets feed page loader */}
+
           <FlatList
             style={feedPageStyles.duetContainer}
             data={this.state.data}
             renderItem={this.renderDuet}
             keyExtractor={(item, index) => index.toString()}
-            onEndReachedThreshold={0}
+            onEndReachedThreshold={10}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
           />
+
+          {/* Duets feed page footer */}
+          <View style={[feedPageStyles.footerContainer]}>
+            <View style={feedPageStyles.flex_row}>
+              <View style={feedPageStyles.footerCameraContainer}>
+                <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
+                  <EntypoIcon name="camera" color={colors.black} size={30} />
+                </TouchableOpacity>
+              </View>
+              <View style={feedPageStyles.footerNotificationContainer}>
+                <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
+                  <EntypoIcon
+                    name="notification"
+                    color={colors.black}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={feedPageStyles.footerSearchContainer}>
+                <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
+                  <Icon name="search" color={colors.black} size={30} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </View>
       </SafeAreaView>
     );

@@ -13,7 +13,7 @@ export const FeedPageStyles = styled.View`
 export const feedPageStyles = StyleSheet.create({
   androidSafeArea: {
     flex: 1,
-    backgroundColor: colors.grey,
+    backgroundColor: colors.black,
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
   feedPageContainer: {
@@ -23,13 +23,14 @@ export const feedPageStyles = StyleSheet.create({
   headerContainer: {
     height: "7%",
     width: "100%",
-    backgroundColor: "#ff1",
+    marginTop: 3,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.borderLightColor,
   },
   logoContainer: {
     width: "20%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "blue",
   },
   loginLogo: {
     height: "80%",
@@ -39,7 +40,6 @@ export const feedPageStyles = StyleSheet.create({
     width: "15%",
     right: "0%",
     height: "100%",
-    backgroundColor: "blue",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
@@ -49,7 +49,6 @@ export const feedPageStyles = StyleSheet.create({
   },
   userThumbnailContainer: {
     flex: 0.2,
-    backgroundColor: "gold",
     margin: 10,
     alignItems: "center",
     justifyContent: "center",
@@ -72,9 +71,7 @@ export const feedPageStyles = StyleSheet.create({
     fontSize: 13.5,
     marginLeft: 5,
   },
-  singleDuetOptionIcon: {
-    backgroundColor: "gold",
-  },
+  singleDuetOptionIcon: {},
   duetLeftImageStyle: {
     width: "100%",
     height: 200,
@@ -95,13 +92,11 @@ export const feedPageStyles = StyleSheet.create({
   },
   duetLeftHeart: {
     flex: 0.5,
-    backgroundColor: "#fbaca8",
     alignItems: "center",
     justifyContent: "center",
   },
   duetRightHeart: {
     flex: 0.5,
-    backgroundColor: "pink",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -117,7 +112,8 @@ export const feedPageStyles = StyleSheet.create({
     fontSize: 16,
   },
   duetCommentContainer: {
-    width: "80%",
+    marginLeft: 10,
+    marginRight: 10,
   },
   userNameCommentStyle: {
     fontFamily: fonts.semibold_text,
@@ -128,6 +124,8 @@ export const feedPageStyles = StyleSheet.create({
     fontFamily: fonts.regular_text,
     fontSize: 16,
     marginLeft: 5,
+    flex: 1,
+    flexWrap: "wrap",
   },
   duetsDividerContainer: {
     height: 40,
@@ -142,6 +140,31 @@ export const feedPageStyles = StyleSheet.create({
   },
   renderLoadMoreStyle: { marginTop: 10, alignItems: "center" },
   singleDuetContainer: {},
+  footerContainer: {
+    height: "7%",
+    width: "100%",
+    borderTopWidth: 0.5,
+    borderTopColor: colors.borderLightColor,
+  },
+  footerCameraContainer: {
+    flex: 1 / 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerNotificationContainer: {
+    flex: 1 / 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerSearchContainer: {
+    flex: 1 / 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerIconContainer: {
+    width: "30%",
+    height: "50%",
+  },
   flex_row: {
     flexDirection: "row",
     flex: 1,
