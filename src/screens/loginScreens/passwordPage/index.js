@@ -11,10 +11,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Entypo";
 import Arrow_Icon from "react-native-vector-icons/EvilIcons";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
 import images from "../../../constConfig/images";
+import { SERVER } from "../../../constConfig/config";
 
 import { PasswordPageStyles, passwordPageStyles } from "./style.js";
 import { color } from "react-native-reanimated";
@@ -37,7 +39,91 @@ class LoginPage extends React.Component {
       loginbuttonTextColor: colors.textLightColor,
       loginbuttonBackColor: colors.white,
       loginDisable: true,
+      password: "",
+      wrongPassword: false
     };
+  }
+
+  loginUser(id, password) {
+    const data = {
+      id,
+      password
+    };
+    fetch(`${SERVER}/login/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(res => {
+      console.log('response here', res);
+      if (!res.error) {
+        this.props.navigation.navigate("HomeScreen");
+      } else {
+        if (res.error === strings.INCORRECT_PASSWORD) {
+          console.log('pass was wrong');
+          this.setState({
+            wrongPassword: true,
+            loginbuttonTextColor: colors.textLightColor,
+            loginbuttonBackColor: colors.white,
+            loginDisable: true,
+          })
+        }
+      }
+    })
+    .catch(err => {
+      console.log('error here', err);
+    })
+  }
+
+  forgotPasswordClick(id) {
+    const data = {
+      id
+    }
+    fetch(`${SERVER}/login/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then(response => {
+      if (response.error) {
+        this.showAlertMessage(strings.forgotPasswordFailure);
+      } else{
+        this.showAlertMessage(strings.forgotPasswordSuccess + response.id);
+      }
+    })
+    .catch(err => {
+      this.showAlertMessage(strings.forgotPasswordFailure);
+      console.log('forgot pass resp', err);
+    })
+  }
+
+  handlePassChange(inputText) {
+    {
+      if (inputText != "") {
+        this.setState({
+          loginbuttonTextColor: colors.black,
+          loginbuttonBackColor: colors.backgroundGrey,
+          loginDisable: false,
+          password: inputText,
+        });
+      } else {
+        this.setState({
+          loginbuttonTextColor: colors.textLightColor,
+          loginbuttonBackColor: colors.white,
+          loginDisable: true,
+        });
+      }
+    }
+  }
+
+  showAlertMessage(message) {
+    showMessage({
+      message,
+      type: 'info',
+      duration: 3000
+    });
   }
 
   render() {
@@ -72,30 +158,20 @@ class LoginPage extends React.Component {
 
           <View style={passwordPageStyles.passwordFormContainer}>
             <TextInput
-              placeholder={strings.enterPass}
-              placeholderTextColor={colors.textLightColor}
+              placeholder={this.state.wrongPassword ? strings.wrongPassword : strings.enterPass}
+              placeholderTextColor={this.state.wrongPassword ? colors.red : colors.textLightColor}
               secureTextEntry={true}
               underlineColorAndroid="transparent"
               style={passwordPageStyles.loginForminput}
-              onChangeText={(inputText) => {
-                if (inputText != "") {
-                  this.setState({
-                    loginbuttonTextColor: colors.black,
-                    loginbuttonBackColor: colors.backgroundGrey,
-                    loginDisable: false,
-                  });
-                } else {
-                  this.setState({
-                    loginbuttonTextColor: colors.textLightColor,
-                    loginbuttonBackColor: colors.white,
-                    loginDisable: true,
-                  });
-                }
-              }}
+              onChangeText={(inputText) => this.handlePassChange(inputText)}
+              textAlign="center"
             />
           </View>
 
-          <TouchableOpacity style={passwordPageStyles.forgotPassContainer}>
+          <TouchableOpacity
+            style={passwordPageStyles.forgotPassContainer}
+            onPress={() => this.forgotPasswordClick(this.props.route.params.userDetails)}
+          >
             <Text style={passwordPageStyles.forgotPassHeading}>
               {strings.forgotPass}
             </Text>
@@ -106,7 +182,7 @@ class LoginPage extends React.Component {
               passwordPageStyles.loginHeadingContainer,
               { backgroundColor: this.state.loginbuttonBackColor },
             ]}
-            onPress={() => this.props.navigation.navigate("HomeScreen")}
+            onPress={() => this.loginUser(this.props.route.params.userDetails, this.state.password)}
             disabled={this.state.loginDisable}
           >
             <View style={{ flexDirection: "row" }}>

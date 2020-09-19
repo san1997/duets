@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import FlashMessage from "react-native-flash-message";
 
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
@@ -89,6 +90,7 @@ export default class App extends React.Component {
             <Stack.Screen name="PasswordPage" component={PasswordPage} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
           </Stack.Navigator>
+          <FlashMessage position="top" />
         </NavigationContainer>
       );
     } else {
