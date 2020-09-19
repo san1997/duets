@@ -9,4 +9,5 @@ export default {
   welcome: "Welcome",
   enterPass: "Enter Password",
   loginButtonText: "Log in",
+  dividerLine: "─────────────────",
 };
