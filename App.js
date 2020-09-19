@@ -24,6 +24,9 @@ console.warn = (message) => {
 /* Loading fonts */
 let customFonts = {
   "SourceSansPro-Regular": require("./src/assets/fonts/SourceSansPro-Regular.ttf"),
+  "SourceSansPro-Bold": require("./src/assets/fonts/SourceSansPro-Bold.ttf"),
+  "SourceSansPro-SemiBold": require("./src/assets/fonts/SourceSansPro-SemiBold.ttf"),
+  "SourceSansPro-BoldItalic": require("./src/assets/fonts/SourceSansPro-BoldItalic.ttf"),
 };
 
 /* Load Screens here */
