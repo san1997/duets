@@ -8,5 +8,6 @@ export default {
   textLightColor: "#9e9e9e",
   linkColor: "#4997d0",
   backgroundGrey: "#f5f5f5",
-  red: "#ff0000"
+  red: "#ff0000",
+  blackTimeColor: "#333333",
 };
