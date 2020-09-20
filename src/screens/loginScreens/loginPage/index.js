@@ -37,6 +37,12 @@ class LoginPage extends React.Component {
     })
   }
 
+  switchToRegistrationPage() {
+    this.props.navigation.navigate("RegistrationPage", {
+      userDetails: this.state.logDetails,
+    })
+  }
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -121,7 +127,10 @@ class LoginPage extends React.Component {
             <Text style={loginStyles.orDivText}>{strings.orHeading}</Text>
           </View>
 
-          <TouchableOpacity style={loginStyles.signupHeadingContainer}>
+          <TouchableOpacity
+            style={loginStyles.signupHeadingContainer}
+            onPress={() => this.switchToRegistrationPage()}
+          >
             <Text style={loginStyles.signupHeading}>
               {strings.signupHeading}
             </Text>
