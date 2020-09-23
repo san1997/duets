@@ -33,6 +33,7 @@ let customFonts = {
 import WelcomePage from "./src/screens/welcomePage";
 import LoginPage from "./src/screens/loginScreens/loginPage";
 import PasswordPage from "./src/screens/loginScreens/passwordPage";
+import RegistrationPage from "./src/screens/loginScreens/registrationPage";
 import HomeScreen from "./src/screens/homeScreen";
 
 /*Optionally import the services that you want to use */
@@ -91,6 +92,7 @@ export default class App extends React.Component {
             <Stack.Screen name="WelcomePage" component={WelcomePage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
             <Stack.Screen name="PasswordPage" component={PasswordPage} />
+            <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
           </Stack.Navigator>
           <FlashMessage position="top" />

@@ -9,6 +9,7 @@ export default {
   welcome: "Welcome",
   enterPass: "Enter Password",
   loginButtonText: "Log In",
+  signupButtonText: "Sign Up",
   wrongPassword: "You seem to have messed up your password.",
   forgotPasswordSuccess: "We have sent a password reset link to: ",
   forgotPasswordFailure:
