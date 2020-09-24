@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, Image, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import Arrow_Icon from "react-native-vector-icons/EvilIcons";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import { RegistrationPageStyles, registrationPageStyles } from "./style.js";
 
@@ -32,6 +33,10 @@ class RegistrationPage extends React.Component {
     }
 
     handleSignup() {
+      if (!this.verifyPassword()) {
+        this.showAlertMessage(strings.unsecurePassword);
+        return ;
+      }
       const data = {
         id: this.state.id,
         password: this.state.password,
@@ -49,12 +54,28 @@ class RegistrationPage extends React.Component {
         if (!res.error) {
           this.props.navigation.navigate("HomeScreen");
         } else {
-          
+
         }
       })
       .catch(err => {
         console.log('error here', err);
       })
+    }
+
+    verifyPassword() {
+        const pass = this.state.password;
+        if (pass.length >= 6 && pass.match(/[0-9]/)) {
+          return true;
+        }
+        return false;
+    }
+
+    showAlertMessage(message) {
+      showMessage({
+        message,
+        type: 'info',
+        duration: 3000
+      });
     }
 
     render() {

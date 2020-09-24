@@ -14,6 +14,7 @@ export default {
   forgotPasswordSuccess: "We have sent a password reset link to: ",
   forgotPasswordFailure:
     "We had trouble reseting your account. Please check your id and try again.",
+  unsecurePassword: "Your password should be atleast 6 characters long and should have a number.",
   INCORRECT_PASSWORD: "INCORRECT_PASSWORD",
   USER_NOT_FOUND: "USER_NOT_FOUND",
   loginButtonText: "Log in",
