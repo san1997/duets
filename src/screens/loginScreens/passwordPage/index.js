@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Entypo";
 import Arrow_Icon from "react-native-vector-icons/EvilIcons";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { CommonActions } from '@react-navigation/native';
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
@@ -58,7 +59,10 @@ class LoginPage extends React.Component {
     .then(res => {
       console.log('response here', res);
       if (!res.error) {
-        this.props.navigation.navigate("HomeScreen");
+        this.props.route.params.loginUser(res.uid);
+        this.props.navigation.dispatch(
+          CommonActions.goBack()
+        );
       } else {
         if (res.error === strings.INCORRECT_PASSWORD) {
           console.log('pass was wrong');

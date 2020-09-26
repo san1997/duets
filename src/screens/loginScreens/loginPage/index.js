@@ -34,12 +34,14 @@ class LoginPage extends React.Component {
   switchToPasswordPage() {
     this.props.navigation.navigate("PasswordPage", {
       userDetails: this.state.logDetails,
+      loginUser: this.props.loginUser
     })
   }
 
   switchToRegistrationPage() {
     this.props.navigation.navigate("RegistrationPage", {
       userDetails: this.state.logDetails,
+      loginUser: this.props.loginUser
     })
   }
 

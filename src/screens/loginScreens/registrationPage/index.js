@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, Image, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import Arrow_Icon from "react-native-vector-icons/EvilIcons";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { CommonActions } from '@react-navigation/native';
 
 import { RegistrationPageStyles, registrationPageStyles } from "./style.js";
 
@@ -52,7 +53,10 @@ class RegistrationPage extends React.Component {
       .then(res => {
         console.log('response here', res);
         if (!res.error) {
-          this.props.navigation.navigate("HomeScreen");
+          this.props.route.params.loginUser(res.uid);
+          this.props.navigation.dispatch(
+            CommonActions.goBack()
+          );
         } else {
 
         }

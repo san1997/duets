@@ -1,21 +1,38 @@
 import React from "react";
 
+import FirstPage from "../firstPage";
+
 import { WelcomePageStyles, Title, Logo } from "./style.js";
 import logoImage from "../../assets/logo.png";
-import { app } from "firebase";
+
 
 class WelcomePage extends React.Component {
   componentDidMount() {
     setTimeout(() => {
-      this.props.navigation.navigate("LoginPage");
+      this.setState({timeoutComplete: true})
     }, 3000);
   }
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeoutComplete: false
+    };
+  }
+  renderWelcome() {
     return (
       <WelcomePageStyles>
         <Logo source={logoImage}></Logo>
         <Title>Welcome to Duet</Title>
       </WelcomePageStyles>
+    );
+  }
+  render() {
+    return (
+      this.state.timeoutComplete ?
+      <FirstPage
+        navigation={this.props.navigation}
+      /> :
+      this.renderWelcome()
     );
   }
 }
