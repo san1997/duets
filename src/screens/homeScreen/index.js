@@ -32,7 +32,6 @@ class HomeScreen extends React.Component {
             />
           </ProfileStack.Navigator>
         </NavigationContainer>
-        <ProfileScreen userId={"lDjbCXZC02bECatjaiyFRDr08SN2"} />
       </Swiper>
     );
   }
