@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import FeedScreen from "./FeedScreen";
+import FeedScreenWrapper from "./NavigationWrappers/FeedScreenWrapper";
 import ProfileScreen from "./ProfileScreen";
 import UploadScreen from "./UploadScreen";
 import EditProfileScreen from "./EditProfileScreen";
@@ -16,9 +16,7 @@ class HomeScreen extends React.Component {
     return (
       <Swiper loop={false} showsPagination={false} index={1}>
         <UploadScreen />
-        <FeedScreen
-          uid={this.props.uid}
-        />
+        <FeedScreenWrapper uid={this.props.uid} />
         <NavigationContainer independent="true">
           <ProfileStack.Navigator
             initialRouteName="ProfileScreen"
@@ -34,7 +32,6 @@ class HomeScreen extends React.Component {
             />
           </ProfileStack.Navigator>
         </NavigationContainer>
-        <ProfileScreen userId={"lDjbCXZC02bECatjaiyFRDr08SN2"} />
       </Swiper>
     );
   }

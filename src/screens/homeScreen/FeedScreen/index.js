@@ -19,19 +19,30 @@ import images from "../../../constConfig/images";
 
 import { feedPageStyles } from "./style.js";
 
-class FeedScreen extends React.Component {
-  constructor() {
-    super();
+class FeedScreen extends React.PureComponent {
+  constructor(props) {
+    super(props);
     this.state = { data: [], page: 1, isLoading: false };
+  }
+
+  switchToFullImagePage(imgData, startFromBack) {
+    this.props.navigation.navigate("FullDuetScreen", {
+      imgDetails: imgData,
+      startFromBack: startFromBack,
+    });
   }
 
   componentDidMount() {
     this.setState({ isLoading: false }, this.getData);
   }
 
+  scrollToTop = () => {
+    this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+  };
+
   getData = async () => {
     const url =
-      "https://jsonplaceholder.typicode.com/photos?_limit=10&_page=" +
+      "https://jsonplaceholder.typicode.com/photos?_limit=5&_page=" +
       this.state.page;
     fetch(url)
       .then((response) => response.json())
@@ -85,14 +96,30 @@ class FeedScreen extends React.Component {
         <View
           style={[feedPageStyles.flex_row, feedPageStyles.singleDuetContainer]}
         >
-          <Image
-            source={{ uri: item.url }}
-            style={feedPageStyles.duetLeftImageStyle}
-          />
-          <Image
-            source={{ uri: item.url }}
-            style={feedPageStyles.duetRightImageStyle}
-          />
+          <TouchableOpacity
+            style={feedPageStyles.duetImageContainer}
+            activeOpacity={0.8}
+            onPress={() =>
+              this.switchToFullImagePage([item.url, item.url], false)
+            }
+          >
+            <Image
+              source={{ uri: item.url }}
+              style={feedPageStyles.duetLeftImageStyle}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={feedPageStyles.duetImageContainer}
+            activeOpacity={0.8}
+            onPress={() =>
+              this.switchToFullImagePage([item.url, item.url], true)
+            }
+          >
+            <Image
+              source={{ uri: item.url }}
+              style={feedPageStyles.duetRightImageStyle}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={[feedPageStyles.flex_row, feedPageStyles.duetHeartsContainer]}
@@ -155,15 +182,18 @@ class FeedScreen extends React.Component {
           </View>
 
           {/* Duets feed page loader */}
-
           <FlatList
             style={feedPageStyles.duetContainer}
+            ref={(ref) => {
+              this.flatListRef = ref;
+            }}
             data={this.state.data}
             renderItem={this.renderDuet}
             keyExtractor={(item, index) => index.toString()}
-            onEndReachedThreshold={10}
+            onEndReachedThreshold={2}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
+            // onRefresh={this.handleRefresh}
           />
 
           {/* Duets feed page footer */}
@@ -172,6 +202,14 @@ class FeedScreen extends React.Component {
               <View style={feedPageStyles.footerCameraContainer}>
                 <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
                   <EntypoIcon name="camera" color={colors.black} size={30} />
+                </TouchableOpacity>
+              </View>
+              <View style={feedPageStyles.footerHomeContainer}>
+                <TouchableOpacity
+                  style={[feedPageStyles.footerIconContainer]}
+                  onPress={this.scrollToTop}
+                >
+                  <EntypoIcon name="home" color={colors.black} size={30} />
                 </TouchableOpacity>
               </View>
               <View style={feedPageStyles.footerNotificationContainer}>

@@ -34,15 +34,15 @@ class LoginPage extends React.Component {
   switchToPasswordPage() {
     this.props.navigation.navigate("PasswordPage", {
       userDetails: this.state.logDetails,
-      loginUser: this.props.loginUser
-    })
+      loginUser: this.props.loginUser,
+    });
   }
 
   switchToRegistrationPage() {
     this.props.navigation.navigate("RegistrationPage", {
       userDetails: this.state.logDetails,
-      loginUser: this.props.loginUser
-    })
+      loginUser: this.props.loginUser,
+    });
   }
 
   render() {
@@ -96,8 +96,7 @@ class LoginPage extends React.Component {
               loginStyles.continueContainer,
               { backgroundColor: this.state.continueBackColor },
             ]}
-            onPress={() => this.switchToPasswordPage()
-            }
+            onPress={() => this.switchToPasswordPage()}
           >
             <View style={loginStyles.flex_row}>
               <Text
