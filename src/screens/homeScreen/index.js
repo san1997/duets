@@ -16,7 +16,9 @@ class HomeScreen extends React.Component {
     return (
       <Swiper loop={false} showsPagination={false} index={1}>
         <UploadScreen />
-        <FeedScreen />
+        <FeedScreen
+          uid={this.props.uid}
+        />
         <NavigationContainer independent="true">
           <ProfileStack.Navigator
             initialRouteName="ProfileScreen"
