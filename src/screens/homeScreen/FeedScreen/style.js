@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar, Platform } from "react-native";
 
 import colors from "../../../constConfig/colors";
 import fonts from "../../../constConfig/fonts";
@@ -13,8 +13,8 @@ export const FeedPageStyles = styled.View`
 export const feedPageStyles = StyleSheet.create({
   androidSafeArea: {
     flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     backgroundColor: colors.black,
-    paddingTop: Platform.OS === "android" ? 25 : 0,
   },
   feedPageContainer: {
     flex: 1,
@@ -72,18 +72,19 @@ export const feedPageStyles = StyleSheet.create({
     marginLeft: 5,
   },
   singleDuetOptionIcon: {},
+  duetImageContainer: {
+    flex: 0.5,
+  },
   duetLeftImageStyle: {
     width: "100%",
     height: 200,
     resizeMode: "cover",
-    flex: 0.5,
     marginRight: 0.5,
   },
   duetRightImageStyle: {
     width: "100%",
     height: 200,
     resizeMode: "cover",
-    flex: 0.5,
     marginLeft: 0.5,
   },
   duetHeartsContainer: {
@@ -147,17 +148,24 @@ export const feedPageStyles = StyleSheet.create({
     borderTopColor: colors.borderLightColor,
   },
   footerCameraContainer: {
-    flex: 1 / 3,
+    flex: 1 / 4,
     alignItems: "center",
     justifyContent: "center",
   },
+  footerHomeContainer: {
+    flex: 1 / 4,
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomWidth: 2,
+    borderBottomColor: colors.red,
+  },
   footerNotificationContainer: {
-    flex: 1 / 3,
+    flex: 1 / 4,
     alignItems: "center",
     justifyContent: "center",
   },
   footerSearchContainer: {
-    flex: 1 / 3,
+    flex: 1 / 4,
     alignItems: "center",
     justifyContent: "center",
   },
