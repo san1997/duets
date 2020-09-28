@@ -165,7 +165,7 @@ class FeedScreen extends React.PureComponent {
       <SafeAreaView style={feedPageStyles.androidSafeArea}>
         {/* Duets Feed page header */}
         <View style={feedPageStyles.feedPageContainer}>
-          <View style={[feedPageStyles.headerContainer]}>
+          {/* <View style={[feedPageStyles.headerContainer]}>
             <View style={feedPageStyles.flex_row}>
               <View style={feedPageStyles.logoContainer}>
                 <Image
@@ -179,7 +179,7 @@ class FeedScreen extends React.PureComponent {
                 <Icon name="menu" color={colors.black} size={30} />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
 
           {/* Duets feed page loader */}
           <FlatList
