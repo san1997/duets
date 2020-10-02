@@ -1,15 +1,10 @@
 import React from "react";
 import Swiper from "react-native-swiper";
 import { View, Text, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 
 import FeedScreenWrapper from "./NavigationWrappers/FeedScreenWrapper";
-import ProfileScreen from "./ProfileScreen";
 import UploadScreen from "./UploadScreen";
-import EditProfileScreen from "./EditProfileScreen";
-
-const ProfileStack = createStackNavigator();
+import ProfileScreenWrapper from "./NavigationWrappers/ProfileScreenWrapper";
 
 class HomeScreen extends React.Component {
   render() {
@@ -17,21 +12,7 @@ class HomeScreen extends React.Component {
       <Swiper loop={false} showsPagination={false} index={1}>
         <UploadScreen />
         <FeedScreenWrapper uid={this.props.uid} />
-        <NavigationContainer independent="true">
-          <ProfileStack.Navigator
-            initialRouteName="ProfileScreen"
-            screenOptions={{ headerShown: false }}
-          >
-            <ProfileStack.Screen
-              name="ProfileScreen"
-              component={ProfileScreen}
-            />
-            <ProfileStack.Screen
-              name="EditProfileScreen"
-              component={EditProfileScreen}
-            />
-          </ProfileStack.Navigator>
-        </NavigationContainer>
+        <ProfileScreenWrapper uid={this.props.uid} />
       </Swiper>
     );
   }
