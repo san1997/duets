@@ -15,6 +15,11 @@ import FeedScreen from "../../FeedScreen";
 import FullDuetScreen from "../../FeedScreen/FullDuetScreen";
 import { DrawerContent } from "../../FeedScreen/FeedDrawer/DrawerContent";
 
+/* drwaer screens import */
+import AccountScreen from "../../FeedScreen/FeedDrawer/DrawerScreens/AccountScreen";
+import ProfileScreen from "../../ProfileScreen";
+import EditProfileScreen from "../../EditProfileScreen";
+
 const FeedStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -74,15 +79,22 @@ class FeedScreenWrapper extends React.Component {
     return (
       <NavigationContainer independent>
         <Drawer.Navigator
-          drawerPosition="left"
+          options={{ headerShown: true }}
+          drawerPosition="right"
+          backBehavior="initialRoute"
           drawerStyle={{
-            backgroundColor: "#ff1",
+            backgroundColor: colors.white,
             width: Dimensions.get("window").width * 0.7,
           }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="FeedScreen" component={FeedStackScreen} />
-          <Drawer.Screen name="FeedScreen2" component={FeedStackScreen} />
+          <Drawer.Screen name="AccountScreen" component={AccountScreen} />
+          <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Drawer.Screen
+            name="EditProfileScreen"
+            component={EditProfileScreen}
+          />
         </Drawer.Navigator>
         {/* */}
       </NavigationContainer>
