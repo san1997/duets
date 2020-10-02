@@ -197,7 +197,7 @@ class FeedScreen extends React.PureComponent {
           />
 
           {/* Duets feed page footer */}
-          <View style={[feedPageStyles.footerContainer]}>
+          {/* <View style={[feedPageStyles.footerContainer]}>
             <View style={feedPageStyles.flex_row}>
               <View style={feedPageStyles.footerCameraContainer}>
                 <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
@@ -227,7 +227,7 @@ class FeedScreen extends React.PureComponent {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </View> */}
         </View>
       </SafeAreaView>
     );

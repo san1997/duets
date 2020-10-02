@@ -4,6 +4,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View, Image, TouchableOpacity, Dimensions } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import Icon from "react-native-vector-icons/Feather";
 
@@ -15,13 +18,16 @@ import FeedScreen from "../../FeedScreen";
 import FullDuetScreen from "../../FeedScreen/FullDuetScreen";
 import { DrawerContent } from "../../FeedScreen/FeedDrawer/DrawerContent";
 
-/* drwaer screens import */
+/* drawer screens import */
 import AccountScreen from "../../FeedScreen/FeedDrawer/DrawerScreens/AccountScreen";
 import ProfileScreen from "../../ProfileScreen";
 import EditProfileScreen from "../../EditProfileScreen";
 
+/* tab screens import */
+
 const FeedStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
 const FeedStackScreen = ({ navigation }) => (
   <FeedStack.Navigator initialRouteName="FeedScreen">
@@ -70,6 +76,55 @@ const FeedStackScreen = ({ navigation }) => (
   </FeedStack.Navigator>
 );
 
+const FeedTabNavigatorScreen = () => (
+  <Tab.Navigator
+    initialRouteName="Feed"
+    tabBarOptions={{
+      activeTintColor: "#800000",
+      inactiveTintColor: "black",
+      showLabel: false,
+    }}
+    style={{ backgroundColor: colors.grey }}
+  >
+    <Tab.Screen
+      name="Camera"
+      component={AccountScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="camera" color={color} size={32} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Feed"
+      component={FeedStackScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <EntypoIcon name="home" color={color} size={32} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Notifications"
+      component={AccountScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <EntypoIcon name="notification" color={color} size={30} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Search"
+      component={AccountScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <Icon name="search" color={color} size={30} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
+
 class FeedScreenWrapper extends React.Component {
   openSideDrawer = () => {
     navigation.navigate.toggleDrawer();
@@ -88,7 +143,7 @@ class FeedScreenWrapper extends React.Component {
           }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="FeedScreen" component={FeedStackScreen} />
+          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} />
           <Drawer.Screen name="AccountScreen" component={AccountScreen} />
           <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
           <Drawer.Screen
