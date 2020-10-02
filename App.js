@@ -93,7 +93,10 @@ export default class App extends React.Component {
             <Stack.Screen name="WelcomePage" component={WelcomePage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
             <Stack.Screen name="PasswordPage" component={PasswordPage} />
-            <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
+            <Stack.Screen
+              name="RegistrationPage"
+              component={RegistrationPage}
+            />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="FirstPage" component={FirstPage} />
           </Stack.Navigator>
