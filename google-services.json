@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1015262992474",
+    "firebase_url": "https://duets-app-a40c0.firebaseio.com",
+    "project_id": "duets-app-a40c0",
+    "storage_bucket": "duets-app-a40c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015262992474:android:0e53a42113aab62fa5e063",
+        "android_client_info": {
+          "package_name": "com.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015262992474-urekofcv9sme1pu7mduamvdqe7pivd68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTPq89oaV1PuBb-X8CM-hyfG6KiQ8bMsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015262992474-urekofcv9sme1pu7mduamvdqe7pivd68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

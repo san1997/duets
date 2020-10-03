@@ -16,6 +16,7 @@ import colors from "../../../constConfig/colors";
 import images from "../../../constConfig/images";
 
 import { LoginPageStyles, loginStyles } from "./style.js";
+import ThirdPartyLogin from "../../ThirdPartyLogin";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -124,6 +125,10 @@ class LoginPage extends React.Component {
             </Text>
           </TouchableOpacity>
 
+          <View style={loginStyles.thirdPartyLogin}>
+            <ThirdPartyLogin />
+          </View>
+
           <View style={loginStyles.orDivContainer}>
             <Text style={loginStyles.orDivText}>{strings.orHeading}</Text>
           </View>
@@ -137,6 +142,7 @@ class LoginPage extends React.Component {
             </Text>
           </TouchableOpacity>
         </LoginPageStyles>
+
       </SafeAreaView>
     );
   }

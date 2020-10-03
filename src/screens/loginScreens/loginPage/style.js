@@ -59,6 +59,10 @@ export const loginStyles = StyleSheet.create({
     fontFamily: fonts.regular_text,
     fontSize: 14,
   },
+
+  thirdPartyLogin: {
+    top: "25%",
+  },
   continueContainer: {
     width: "80%",
     padding: 11,
@@ -83,7 +87,7 @@ export const loginStyles = StyleSheet.create({
     fontFamily: fonts.regular_text,
   },
   orDivContainer: {
-    top: "25%",
+    top: "28%",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -94,7 +98,7 @@ export const loginStyles = StyleSheet.create({
     color: colors.borderLightColor,
   },
   signupHeadingContainer: {
-    top: "27%",
+    top: "30%",
     backgroundColor: colors.backgroundLight,
     width: "100%",
     height: "5%",

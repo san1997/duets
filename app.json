@@ -13,12 +13,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
+    },
+    "android": {
+      "package": "com.duets.app",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
