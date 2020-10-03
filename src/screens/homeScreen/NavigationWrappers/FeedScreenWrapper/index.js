@@ -93,8 +93,8 @@ const FeedTabNavigatorScreen = () => (
   <Tab.Navigator
     initialRouteName="Feed"
     tabBarOptions={{
-      activeTintColor: "#800000",
-      inactiveTintColor: "black",
+      activeTintColor: colors.maroon,
+      inactiveTintColor: colors.black,
       showLabel: false,
     }}
     style={{ backgroundColor: colors.grey }}

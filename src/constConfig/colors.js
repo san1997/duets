@@ -11,4 +11,5 @@ export default {
   backgroundGrey: "#f5f5f5",
   red: "#ff0000",
   blackTimeColor: "#333333",
+  maroon: "#800000",
 };
