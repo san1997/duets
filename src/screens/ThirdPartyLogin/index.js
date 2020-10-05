@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import * as Google from "expo-google-app-auth";
+import * as Facebook from "expo-facebook";
 
 import * as firebase from "firebase";
 import 'firebase/firestore';
@@ -114,6 +115,52 @@ class ThirdPartyLogin extends React.Component {
       }.bind(this)
     );
   };
+
+  onSignInFacebook = facebookUser => {
+    const that = this;
+    console.log('inside fb', facebookUser);
+    const credential = firebase.auth.FacebookAuthProvider.credential(facebookUser.token);
+    console.log('this is credential', credential);
+    firebase
+     .auth().signInWithCredential(credential)
+     .then(result => {
+       if (result.additionalUserInfo.isNewUser) {
+         firebase
+           .firestore()
+           .collection('users').doc(result.user.uid)
+           .set({
+             profilePicture: result.additionalUserInfo.profile.picture.data.url,
+             firstName: result.additionalUserInfo.profile.first_name,
+             lastName: result.additionalUserInfo.profile.last_name,
+             created_at: Date.now(),
+             visibility: 'private',
+             following: [],
+             follower: [],
+             userId: 'test_id',
+             duets: []
+           })
+           .then(function(snapshot) {
+             console.log('this is the userid', result.user.uid);
+             that.props.loginUser(result.user.uid);
+           });
+       } else {
+         firebase
+           .firestore()
+           .collection('users').doc(result.user.uid)
+           .update({
+             last_logged_in: Date.now()
+           })
+           .then(function(snapshot) {
+             console.log('this is the userid', result.user.uid);
+             that.props.loginUser(result.user.uid);
+           });
+       }
+     })
+     .catch(error => {
+         console.log(error);
+     });
+  }
+
   signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
@@ -132,6 +179,24 @@ class ThirdPartyLogin extends React.Component {
       return { error: true };
     }
   };
+  signInWithFacebookAsync = async () => {
+    try {
+      await Facebook.initializeAsync('620675282147064');
+      const result = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+      if (result.type === 'success') {
+        this.setState({ loading: true });
+        this.onSignInFacebook(result);
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (err) {
+      return { error: true };
+      console.log(`Facebook Login Error: ${err}`);
+  }
+  };
   render() {
     if (this.state.loading) return <Loading />;
     return (
@@ -146,7 +211,7 @@ class ThirdPartyLogin extends React.Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {console.log('clicking on facebook');}}
+            onPress={() => {this.signInWithFacebookAsync()}}
           >
             <Image
               source={facebookLogo}

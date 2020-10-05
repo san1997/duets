@@ -23,7 +23,8 @@
       "favicon": "./src/assets/favicon.png"
     },
     "android": {
-      "package": "com.duets.app",
+      "package": "com.duetsapp.expo",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json"
     }
   }
