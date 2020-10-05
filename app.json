@@ -13,12 +13,19 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
+    },
+    "android": {
+      "package": "com.duetsapp.expo",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
