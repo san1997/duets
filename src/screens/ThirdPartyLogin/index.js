@@ -7,6 +7,7 @@ import 'firebase/firestore';
 
 import googleLogo from "../../assets/google.jpg";
 import facebookLogo from "../../assets/facebook.png";
+import Loading from "../../../components/Loading"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDsUQKD5-aYCRYxfe0UoIhsbDZNdPLtvjc",
@@ -21,6 +22,12 @@ if (!firebase.apps.length) {
 }
 
 class ThirdPartyLogin extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
+  }
   isUserEqual = (googleUser, firebaseUser) => {
     console.log('user here', googleUser);
     if (firebaseUser) {
@@ -39,6 +46,7 @@ class ThirdPartyLogin extends React.Component {
     return false;
   };
   onSignIn = googleUser => {
+    const that = this;
     console.log('Google Auth Response', googleUser);
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged(
@@ -73,7 +81,8 @@ class ThirdPartyLogin extends React.Component {
                     duets: []
                   })
                   .then(function(snapshot) {
-                    console.log('Snapshot', snapshot);
+                    console.log('this is the userid', result.user.uid);
+                    that.props.loginUser(result.user.uid);
                   });
               } else {
                 firebase
@@ -81,6 +90,10 @@ class ThirdPartyLogin extends React.Component {
                   .collection('users').doc(result.user.uid)
                   .update({
                     last_logged_in: Date.now()
+                  })
+                  .then(function(snapshot) {
+                    console.log('this is the userid', result.user.uid);
+                    that.props.loginUser(result.user.uid);
                   });
               }
             })
@@ -109,6 +122,7 @@ class ThirdPartyLogin extends React.Component {
       });
 
       if (result.type === 'success') {
+        this.setState({ loading: true });
         this.onSignIn(result);
         return result.accessToken;
       } else {
@@ -119,6 +133,7 @@ class ThirdPartyLogin extends React.Component {
     }
   };
   render() {
+    if (this.state.loading) return <Loading />;
     return (
       <View style={styles.container}>
           <TouchableOpacity
