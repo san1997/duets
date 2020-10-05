@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import FlashMessage from "react-native-flash-message";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,7 +9,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import Icon from "react-native-vector-icons/Feather";
 
-import { AppLoading } from 'expo';
+import { AppLoading } from "expo";
 
 import { feedScreenWrapperStyles } from "./style.js";
 import colors from "../../../../constConfig/colors";
@@ -25,10 +25,10 @@ import ProfileScreen from "../../ProfileScreen";
 import EditProfileScreen from "../../EditProfileScreen";
 
 /* tab screens import */
+import SearchScreen from "../../TabScreens/SearchScreen";
 
-
-import queryString from 'query-string';
-import { SERVER } from '../../../../constConfig/config';
+import queryString from "query-string";
+import { SERVER } from "../../../../constConfig/config";
 
 const FeedStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,7 +51,7 @@ function FeedStackScreen({ navigation, route }) {
       <FeedStack.Screen
         name="FeedScreen"
         component={FeedScreen}
-        initialParams={{uid: uid}}
+        initialParams={{ uid: uid }}
         options={{
           headerShown: true,
           /*Will remove title and fontsize later*/
@@ -59,7 +59,7 @@ function FeedStackScreen({ navigation, route }) {
           headerTitleStyle: {
             textAlign: "center",
             flex: 1,
-            fontSize: 15
+            fontSize: 15,
           },
           headerLeft: () => (
             <View style={{ marginLeft: 15 }}>
@@ -97,61 +97,60 @@ function FeedStackScreen({ navigation, route }) {
   );
 }
 
-function FeedTabNavigatorScreen({ route }){
-  const { userDetails, uid } = route.params; 
+function FeedTabNavigatorScreen({ route }) {
+  const { userDetails, uid } = route.params;
   return (
     <Tab.Navigator
-    initialRouteName="Feed"
-    tabBarOptions={{
-      activeTintColor: colors.maroon,
-      inactiveTintColor: colors.black,
-      showLabel: false,
-    }}
-    style={{ backgroundColor: colors.grey }}
-  >
-    <Tab.Screen
-      name="Camera"
-      component={AccountScreen}
-      initialParams={{userDetails: userDetails,uid: uid}}
-      options={{
-        tabBarIcon: ({ color }) => (
-          <MaterialCommunityIcons name="camera" color={color} size={32} />
-        ),
+      initialRouteName="Feed"
+      tabBarOptions={{
+        activeTintColor: colors.maroon,
+        inactiveTintColor: colors.black,
+        showLabel: false,
       }}
-    />
-    <Tab.Screen
-      name="Feed"
-      component={FeedStackScreen}
-      initialParams={{userDetails: userDetails, uid: uid}}
-      options={{
-        tabBarIcon: ({ color }) => (
-          <EntypoIcon name="home" color={color} size={32} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Notifications"
-      component={AccountScreen}
-      initialParams={{userDetails: userDetails,uid: uid}}
-      options={{
-        tabBarIcon: ({ color }) => (
-          <EntypoIcon name="notification" color={color} size={30} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Search"
-      component={AccountScreen}
-      initialParams={{userDetails: userDetails, uid: uid}}
-      options={{
-        // tabBarVisible: false,
-        tabBarIcon: ({ color }) => (
-          <Icon name="search" color={color} size={30} />
-        ),
-      }}
-    />
-  </Tab.Navigator>
-  )
+      style={{ backgroundColor: colors.grey }}
+    >
+      <Tab.Screen
+        name="Camera"
+        component={AccountScreen}
+        initialParams={{ userDetails: userDetails, uid: uid }}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="camera" color={color} size={32} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Feed"
+        component={FeedStackScreen}
+        initialParams={{ userDetails: userDetails, uid: uid }}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <EntypoIcon name="home" color={color} size={32} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={AccountScreen}
+        initialParams={{ userDetails: userDetails, uid: uid }}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <EntypoIcon name="notification" color={color} size={30} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          // tabBarVisible: false,
+          tabBarIcon: ({ color }) => (
+            <Icon name="search" color={color} size={30} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
 }
 
 class FeedScreenWrapper extends React.Component {
@@ -159,9 +158,8 @@ class FeedScreenWrapper extends React.Component {
     super(props);
     this.state = {
       userDetails: null,
-      isLoading: true
+      isLoading: true,
     };
-
   }
   componentDidMount() {
     this.fetchUserDetails();
@@ -169,9 +167,9 @@ class FeedScreenWrapper extends React.Component {
 
   fetchUserDetails() {
     const queryObj = {
-      userId: this.props.uid
-    }
-    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}` ;
+      userId: this.props.uid,
+    };
+    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
@@ -185,12 +183,12 @@ class FeedScreenWrapper extends React.Component {
 
   render() {
     if (this.state.isLoading) {
-      return <AppLoading />
+      return <AppLoading />;
     }
     return (
       <NavigationContainer independent>
         <Drawer.Navigator
-          drawerType={'slide'}
+          drawerType={"slide"}
           swipeEnabled={false}
           drawerPosition="right"
           backBehavior="initialRoute"
@@ -199,15 +197,25 @@ class FeedScreenWrapper extends React.Component {
             width: Dimensions.get("window").width * 0.7,
           }}
           drawerContentOptions={{
-            userDetails: this.state.userDetails
+            userDetails: this.state.userDetails,
           }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} initialParams={{userDetails: this.state.userDetails, uid: this.props.uid}}/>
+          <Drawer.Screen
+            name="FeedScreen"
+            component={FeedTabNavigatorScreen}
+            initialParams={{
+              userDetails: this.state.userDetails,
+              uid: this.props.uid,
+            }}
+          />
           <Drawer.Screen
             name="AccountScreen"
             component={AccountScreen}
-            initialParams={{userDetails: this.state.userDetails, uid: this.props.uid}}
+            initialParams={{
+              userDetails: this.state.userDetails,
+              uid: this.props.uid,
+            }}
             /* need to check, why headerShown isn't working */
             options={{ headerShown: true }}
           />
