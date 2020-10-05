@@ -9,13 +9,12 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
+import { useScrollToTop } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import AntIcon from "react-native-vector-icons/AntDesign";
-import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
-import images from "../../../constConfig/images";
 
 import { feedPageStyles } from "./style.js";
 
@@ -36,9 +35,9 @@ class FeedScreen extends React.PureComponent {
     this.setState({ isLoading: false }, this.getData);
   }
 
-  scrollToTop = () => {
-    this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
-  };
+  // scrollToTop = () => {
+  //   this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+  // };
 
   getData = async () => {
     const url =
@@ -184,9 +183,7 @@ class FeedScreen extends React.PureComponent {
           {/* Duets feed page loader */}
           <FlatList
             style={feedPageStyles.duetContainer}
-            ref={(ref) => {
-              this.flatListRef = ref;
-            }}
+            ref={this.props.flatListRef}
             data={this.state.data}
             renderItem={this.renderDuet}
             keyExtractor={(item, index) => index.toString()}
@@ -197,7 +194,7 @@ class FeedScreen extends React.PureComponent {
           />
 
           {/* Duets feed page footer */}
-          <View style={[feedPageStyles.footerContainer]}>
+          {/* <View style={[feedPageStyles.footerContainer]}>
             <View style={feedPageStyles.flex_row}>
               <View style={feedPageStyles.footerCameraContainer}>
                 <TouchableOpacity style={[feedPageStyles.footerIconContainer]}>
@@ -227,11 +224,15 @@ class FeedScreen extends React.PureComponent {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </View> */}
         </View>
       </SafeAreaView>
     );
   }
 }
 
-export default FeedScreen;
+export default function (props) {
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
+  return <FeedScreen {...props} flatListRef={ref} />;
+}

@@ -4,6 +4,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View, Image, TouchableOpacity, Dimensions } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import Icon from "react-native-vector-icons/Feather";
 
@@ -15,59 +18,125 @@ import FeedScreen from "../../FeedScreen";
 import FullDuetScreen from "../../FeedScreen/FullDuetScreen";
 import { DrawerContent } from "../../FeedScreen/FeedDrawer/DrawerContent";
 
-/* drwaer screens import */
+/* drawer screens import */
 import AccountScreen from "../../FeedScreen/FeedDrawer/DrawerScreens/AccountScreen";
 import ProfileScreen from "../../ProfileScreen";
 import EditProfileScreen from "../../EditProfileScreen";
 
+/* tab screens import */
+
 const FeedStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
-const FeedStackScreen = ({ navigation }) => (
-  <FeedStack.Navigator initialRouteName="FeedScreen">
-    <FeedStack.Screen
-      name="FeedScreen"
-      component={FeedScreen}
-      options={{
-        title: "",
-        headerTitleStyle: {
-          textAlign: "center",
-          flex: 1,
-        },
-        headerLeft: () => (
-          <View style={{ marginLeft: 15 }}>
-            <Image
-              style={{
-                resizeMode: "contain",
-                width: 45,
+/* need to render this from seperate component */
+function FeedStackScreen({ navigation, route }) {
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
+
+  return (
+    <FeedStack.Navigator
+      initialRouteName="FeedScreen"
+      /*header for all the feedStacks
+    screenOptions={{ headerShown: true }} */
+    >
+      <FeedStack.Screen
+        name="FeedScreen"
+        component={FeedScreen}
+        options={{
+          headerShown: true,
+          title: "",
+          headerTitleStyle: {
+            textAlign: "center",
+            flex: 1,
+          },
+          headerLeft: () => (
+            <View style={{ marginLeft: 15 }}>
+              <Image
+                style={{
+                  resizeMode: "contain",
+                  width: 45,
+                }}
+                source={images.logoImage}
+              />
+            </View>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ marginRight: 16 }}
+              onPress={() => {
+                navigation.openDrawer();
               }}
-              source={images.logoImage}
-            />
-          </View>
-        ),
-        headerRight: () => (
-          <TouchableOpacity
-            style={{ marginRight: 16 }}
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          >
-            <Icon name="menu" color={colors.black} size={30} />
-          </TouchableOpacity>
-        ),
-      }}
-    />
-    <FeedStack.Screen
-      name="FullDuetScreen"
-      component={FullDuetScreen}
+            >
+              <Icon name="menu" color={colors.black} size={30} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <FeedStack.Screen
+        name="FullDuetScreen"
+        component={FullDuetScreen}
+        options={{
+          headerShown: false,
+          // headerStyle: { backgroundColor: "black" },
+          // title: "Full Image",
+        }}
+      />
+    </FeedStack.Navigator>
+  );
+}
+
+const FeedTabNavigatorScreen = () => (
+  <Tab.Navigator
+    initialRouteName="Feed"
+    tabBarOptions={{
+      activeTintColor: colors.maroon,
+      inactiveTintColor: colors.black,
+      showLabel: false,
+    }}
+    style={{ backgroundColor: colors.grey }}
+  >
+    <Tab.Screen
+      name="Camera"
+      component={AccountScreen}
       options={{
-        headerShown: false,
-        headerStyle: { backgroundColor: "black" },
-        title: "",
-        headerTintColor: "white",
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="camera" color={color} size={32} />
+        ),
       }}
     />
-  </FeedStack.Navigator>
+    <Tab.Screen
+      name="Feed"
+      component={FeedStackScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <EntypoIcon name="home" color={color} size={32} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Notifications"
+      component={AccountScreen}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <EntypoIcon name="notification" color={color} size={30} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Search"
+      component={AccountScreen}
+      options={{
+        // tabBarVisible: false,
+        tabBarIcon: ({ color }) => (
+          <Icon name="search" color={color} size={30} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
 );
 
 class FeedScreenWrapper extends React.Component {
@@ -79,7 +148,6 @@ class FeedScreenWrapper extends React.Component {
     return (
       <NavigationContainer independent>
         <Drawer.Navigator
-          options={{ headerShown: true }}
           drawerPosition="right"
           backBehavior="initialRoute"
           drawerStyle={{
@@ -88,15 +156,19 @@ class FeedScreenWrapper extends React.Component {
           }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="FeedScreen" component={FeedStackScreen} />
-          <Drawer.Screen name="AccountScreen" component={AccountScreen} />
+          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} />
+          <Drawer.Screen
+            name="AccountScreen"
+            component={AccountScreen}
+            /* need to check, why headerShown isn't working */
+            options={{ headerShown: true }}
+          />
           <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
           <Drawer.Screen
             name="EditProfileScreen"
             component={EditProfileScreen}
           />
         </Drawer.Navigator>
-        {/* */}
       </NavigationContainer>
     );
   }
