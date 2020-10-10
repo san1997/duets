@@ -7,8 +7,9 @@ import { View, Image, TouchableOpacity, Dimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-
 import Icon from "react-native-vector-icons/Feather";
+
+import { AppLoading } from 'expo';
 
 import { feedScreenWrapperStyles } from "./style.js";
 import colors from "../../../../constConfig/colors";
@@ -25,18 +26,22 @@ import EditProfileScreen from "../../EditProfileScreen";
 
 /* tab screens import */
 
+
+import queryString from 'query-string';
+import { SERVER } from '../../../../constConfig/config';
+
 const FeedStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 /* need to render this from seperate component */
 function FeedStackScreen({ navigation, route }) {
-  if (route.state && route.state.index > 0) {
-    navigation.setOptions({ tabBarVisible: false });
-  } else {
-    navigation.setOptions({ tabBarVisible: true });
-  }
-
+  // if (route.state && route.state.index > 0) {
+  //   navigation.setOptions({ tabBarVisible: false });
+  // } else {
+  //   navigation.setOptions({ tabBarVisible: true });
+  // }
+  const { userDetails } = route.params;
   return (
     <FeedStack.Navigator
       initialRouteName="FeedScreen"
@@ -48,10 +53,12 @@ function FeedStackScreen({ navigation, route }) {
         component={FeedScreen}
         options={{
           headerShown: true,
-          title: "",
+          /*Will remove title and fontsize later*/
+          title: userDetails.firstName + "'s feed",
           headerTitleStyle: {
             textAlign: "center",
             flex: 1,
+            fontSize: 15
           },
           headerLeft: () => (
             <View style={{ marginLeft: 15 }}>
@@ -89,8 +96,10 @@ function FeedStackScreen({ navigation, route }) {
   );
 }
 
-const FeedTabNavigatorScreen = () => (
-  <Tab.Navigator
+function FeedTabNavigatorScreen({ route }){
+  const { userDetails } = route.params; 
+  return (
+    <Tab.Navigator
     initialRouteName="Feed"
     tabBarOptions={{
       activeTintColor: colors.maroon,
@@ -111,6 +120,7 @@ const FeedTabNavigatorScreen = () => (
     <Tab.Screen
       name="Feed"
       component={FeedStackScreen}
+      initialParams={{userDetails: userDetails}}
       options={{
         tabBarIcon: ({ color }) => (
           <EntypoIcon name="home" color={color} size={32} />
@@ -137,26 +147,59 @@ const FeedTabNavigatorScreen = () => (
       }}
     />
   </Tab.Navigator>
-);
+  )
+}
 
 class FeedScreenWrapper extends React.Component {
-  openSideDrawer = () => {
-    navigation.navigate.toggleDrawer();
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      userDetails: null,
+      isLoading: true
+    };
+
+  }
+  componentDidMount() {
+    this.fetchUserDetails();
+  }
+
+  fetchUserDetails() {
+    const queryObj = {
+      userId: this.props.uid
+    }
+    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}` ;
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ userDetails: json });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
 
   render() {
+    if (this.state.isLoading) {
+      return <AppLoading />
+    }
     return (
       <NavigationContainer independent>
         <Drawer.Navigator
+          drawerType={'slide'}
+          swipeEnabled={false}
           drawerPosition="right"
           backBehavior="initialRoute"
           drawerStyle={{
             backgroundColor: colors.white,
             width: Dimensions.get("window").width * 0.7,
           }}
+          drawerContentOptions={{
+            userDetails: this.state.userDetails
+          }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} />
+          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} initialParams={{userDetails: this.state.userDetails}}/>
           <Drawer.Screen
             name="AccountScreen"
             component={AccountScreen}

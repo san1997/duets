@@ -12,7 +12,6 @@ import { drawerContentStyles } from "./style.js";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export function DrawerContent(props) {
-  const paperTheme = useTheme();
   return (
     <SafeAreaView style={drawerContentStyles.androidSafeArea}>
       <DrawerContentScrollView {...props}>
@@ -25,8 +24,7 @@ export function DrawerContent(props) {
             >
               <Avatar.Image
                 source={{
-                  uri:
-                    "https://scontent-del1-1.cdninstagram.com/v/t51.2885-19/s150x150/105407348_933804930364749_1317614848103623396_n.jpg?_nc_ht=scontent-del1-1.cdninstagram.com&_nc_ohc=tE3BQi9LuPwAX-yvX3Y&oh=69cc8a8e17496555f8d4921581976749&oe=5F9F1121",
+                  uri: props.userDetails.profilePicture
                 }}
                 size={70}
               />
@@ -37,7 +35,7 @@ export function DrawerContent(props) {
               }}
             >
               <Text style={drawerContentStyles.userNameStyle}>
-                Jacqueline Fernandez
+              {props.userDetails.firstName} {props.userDetails.lastName}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -134,8 +132,11 @@ export function DrawerContent(props) {
           )}
           inactiveTintColor={colors.blackTimeColor}
           label="Sign Out"
+          // onPress={() => {
+          //   signOut();
+          // }}
           onPress={() => {
-            signOut();
+            props.navigation.closeDrawer();
           }}
           labelStyle={[drawerContentStyles.drawerTextStyle]}
         />
