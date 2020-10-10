@@ -97,7 +97,7 @@ function FeedStackScreen({ navigation, route }) {
 }
 
 function FeedTabNavigatorScreen({ route }){
-  const { userDetails } = route.params; 
+  const { userDetails, uid } = route.params; 
   return (
     <Tab.Navigator
     initialRouteName="Feed"
@@ -111,6 +111,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Camera"
       component={AccountScreen}
+      initialParams={{uid: uid}}
       options={{
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="camera" color={color} size={32} />
@@ -130,6 +131,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Notifications"
       component={AccountScreen}
+      initialParams={{uid: uid}}
       options={{
         tabBarIcon: ({ color }) => (
           <EntypoIcon name="notification" color={color} size={30} />
@@ -139,6 +141,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Search"
       component={AccountScreen}
+      initialParams={{uid: uid}}
       options={{
         // tabBarVisible: false,
         tabBarIcon: ({ color }) => (
@@ -199,10 +202,11 @@ class FeedScreenWrapper extends React.Component {
           }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} initialParams={{userDetails: this.state.userDetails}}/>
+          <Drawer.Screen name="FeedScreen" component={FeedTabNavigatorScreen} initialParams={{userDetails: this.state.userDetails, uid: this.props.uid}}/>
           <Drawer.Screen
             name="AccountScreen"
             component={AccountScreen}
+            initialParams={{uid: this.props.uid}}
             /* need to check, why headerShown isn't working */
             options={{ headerShown: true }}
           />

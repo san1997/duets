@@ -24,7 +24,7 @@ export function DrawerContent(props) {
             >
               <Avatar.Image
                 source={{
-                  uri: props.userDetails.profilePicture
+                  uri: (props.userDetails.profilePicture ? props.userDetails.profilePicture : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg")
                 }}
                 size={70}
               />
