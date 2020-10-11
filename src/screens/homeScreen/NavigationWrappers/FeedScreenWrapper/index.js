@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import FlashMessage from "react-native-flash-message";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -41,7 +41,7 @@ function FeedStackScreen({ navigation, route }) {
   // } else {
   //   navigation.setOptions({ tabBarVisible: true });
   // }
-  const { userDetails } = route.params;
+  const { userDetails, uid } = route.params;
   return (
     <FeedStack.Navigator
       initialRouteName="FeedScreen"
@@ -51,6 +51,7 @@ function FeedStackScreen({ navigation, route }) {
       <FeedStack.Screen
         name="FeedScreen"
         component={FeedScreen}
+        initialParams={{uid: uid}}
         options={{
           headerShown: true,
           /*Will remove title and fontsize later*/
@@ -111,7 +112,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Camera"
       component={AccountScreen}
-      initialParams={{uid: uid}}
+      initialParams={{userDetails: userDetails,uid: uid}}
       options={{
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="camera" color={color} size={32} />
@@ -121,7 +122,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Feed"
       component={FeedStackScreen}
-      initialParams={{userDetails: userDetails}}
+      initialParams={{userDetails: userDetails, uid: uid}}
       options={{
         tabBarIcon: ({ color }) => (
           <EntypoIcon name="home" color={color} size={32} />
@@ -131,7 +132,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Notifications"
       component={AccountScreen}
-      initialParams={{uid: uid}}
+      initialParams={{userDetails: userDetails,uid: uid}}
       options={{
         tabBarIcon: ({ color }) => (
           <EntypoIcon name="notification" color={color} size={30} />
@@ -141,7 +142,7 @@ function FeedTabNavigatorScreen({ route }){
     <Tab.Screen
       name="Search"
       component={AccountScreen}
-      initialParams={{uid: uid}}
+      initialParams={{userDetails: userDetails, uid: uid}}
       options={{
         // tabBarVisible: false,
         tabBarIcon: ({ color }) => (
@@ -206,7 +207,7 @@ class FeedScreenWrapper extends React.Component {
           <Drawer.Screen
             name="AccountScreen"
             component={AccountScreen}
-            initialParams={{uid: this.props.uid}}
+            initialParams={{userDetails: this.state.userDetails, uid: this.props.uid}}
             /* need to check, why headerShown isn't working */
             options={{ headerShown: true }}
           />

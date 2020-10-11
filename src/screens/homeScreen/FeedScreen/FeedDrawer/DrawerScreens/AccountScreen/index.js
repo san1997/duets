@@ -10,13 +10,16 @@ class AccountScreen extends React.Component {
     super(props);
     this.state = {
       duetId: null,
-      uid: (this.props) ? this.props.route.params.uid: 0
+      uid: (this.props) ? this.props.route.params.uid: 0,
+      userDetails: this.props.route.params.userDetails
     };
   }
 
   addDuetsField() {
     const queryObj = {
-      userId: this.state.uid
+      userId: this.state.uid,
+      userName: this.state.userDetails.userId,
+      profilePicture: this.state.userDetails.profilePicture,
     }
     const url = `${SERVER}/test?${queryString.stringify(queryObj)}` ;
     fetch(url)
