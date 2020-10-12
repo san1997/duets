@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Dimensions } from "react-native";
 
 import colors from "../../../constConfig/colors";
 import fonts from "../../../constConfig/fonts";
@@ -17,7 +17,8 @@ export const editProfilePageStyles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    flex: 1,
+    // flex: 1,
+    // alignItems: "center",
   },
   button: {
     padding: 10,
@@ -33,6 +34,9 @@ export const editProfilePageStyles = StyleSheet.create({
   editImageContainer: {
     marginVertical: 30,
     alignItems: "center",
+    height: Dimensions.get("window").height / 6,
+    width: Dimensions.get("window").height / 6,
+    overflow: "hidden",
   },
   editContainer: {
     flex: 1,

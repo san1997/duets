@@ -1,23 +1,42 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
+  Button,
   View,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  TouchableNativeFeedback,
   ImageBackground,
   TextInput,
   Dimensions,
   SafeAreaView,
+  Modal,
+  Alert,
+  StyleSheet,
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import { editProfilePageStyles } from "./style";
+import BottomSheet from "./BottomSheet/index";
 
 const EditProfileScreen = () => {
+  let popupRef = React.createRef();
+  const onShowBottomSheet = () => {
+    popupRef.show();
+  };
+
+  onCloseBottomSheet = () => {
+    popupRef.close();
+  };
+
   return (
     <SafeAreaView style={editProfilePageStyles.androidSafeArea}>
       <View style={editProfilePageStyles.editContainer}>
-        <View style={editProfilePageStyles.editImageContainer}>
+        <TouchableNativeFeedback
+          style={editProfilePageStyles.editImageContainer}
+          onPress={onShowBottomSheet}
+        >
           <ImageBackground
             source={{
               uri:
@@ -31,7 +50,7 @@ const EditProfileScreen = () => {
               borderRadius: Dimensions.get("window").height / 12,
             }}
           ></ImageBackground>
-        </View>
+        </TouchableNativeFeedback>
         <View style={editProfilePageStyles.action}>
           <FontAwesome name="user-o" size={20} />
           <TextInput
@@ -77,6 +96,11 @@ const EditProfileScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheet
+        ref={(target) => (popupRef = target)}
+        onTouchOutside={onCloseBottomSheet}
+        title="Change Profile Picture"
+      />
     </SafeAreaView>
   );
 };
