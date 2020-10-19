@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-import { ImagePicker } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { Ionicons, Entypo } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ class UploadScreen extends Component {
     super(props);
     this.state = {
       hasPermission: null,
+      hasGalleryPermission: null,
       type: Camera.Constants.Type.back,
       backgroundColor: '#fff',
       cameraOn: true
@@ -23,7 +24,8 @@ class UploadScreen extends Component {
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasPermission: status === 'granted' });
+    const galleryStatus = await Permissions.askAsync(Permissions.CAMERA_ROLL).status;
+    this.setState({ hasPermission: status === 'granted', hasGalleryPermission: status === 'granted' });
   }
 
   componentDidUpdate(prevProps) {
@@ -82,12 +84,28 @@ class UploadScreen extends Component {
     );
   }
 
+  async handleGalleryClick() {
+    console.log('gallery clicked', this.state.hasGalleryPermission);
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    this.props
+    console.log(result);
+    this.props.navigation.navigate("PreviewScreen", {data: result})
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  }
+
   renderGallery() {
     return (
       <TouchableOpacity
         style={UploadScreenStyles.gallery}
         onPress={() => {
-          console.log('gallery select');
+          this.handleGalleryClick()
         }}>
         <Entypo name="images" size={45} color="white" />
       </TouchableOpacity>
