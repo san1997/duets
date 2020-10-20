@@ -11,7 +11,7 @@ export const bottomSheetStyles = StyleSheet.create({
   },
   contianer: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.2)",
+    //backgroundColor: "rgba(0,0,0,0.2)",
     justifyContent: "flex-end",
   },
   outSideView: {

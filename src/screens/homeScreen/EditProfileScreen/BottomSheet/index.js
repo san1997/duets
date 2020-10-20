@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -10,12 +10,14 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import { bottomSheetStyles } from "./style";
+import * as ImagePicker from "expo-image-picker";
 
 export class BottomSheet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
+      image: null,
     };
   }
 
@@ -42,6 +44,30 @@ export class BottomSheet extends React.Component {
     );
   }
 
+  openImagePicker = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+    const { onPhotoUpdate } = this.props;
+    onPhotoUpdate.bind(this, this.setState({ image: result.uri }));
+    this.close();
+  };
+
   renderTitle = () => {
     const { title } = this.props;
     return (
@@ -54,7 +80,7 @@ export class BottomSheet extends React.Component {
   renderContent = () => {
     return (
       <View style={bottomSheetStyles.textOptionsContainer}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={this.openImagePicker}>
           <View style={{ flexDirection: "row" }}>
             <Ionicons name="ios-camera" size={25} />
             {<Text>{"   "}</Text>}

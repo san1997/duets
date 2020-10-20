@@ -10,9 +10,6 @@ import {
   TextInput,
   Dimensions,
   SafeAreaView,
-  Modal,
-  Alert,
-  StyleSheet,
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -20,14 +17,22 @@ import Feather from "react-native-vector-icons/Feather";
 import { editProfilePageStyles } from "./style";
 import BottomSheet from "./BottomSheet/index";
 
-const EditProfileScreen = () => {
+const EditProfileScreen = (props) => {
   let popupRef = React.createRef();
   const onShowBottomSheet = () => {
     popupRef.show();
   };
 
-  onCloseBottomSheet = () => {
+  const onCloseBottomSheet = () => {
     popupRef.close();
+  };
+
+  const [selectedImage, setSelectedImage] = useState(
+    "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+  );
+
+  const imageTakenHandler = (imagePath) => {
+    setSelectedImage(imagePath);
   };
 
   return (
@@ -39,8 +44,7 @@ const EditProfileScreen = () => {
         >
           <ImageBackground
             source={{
-              uri:
-                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+              uri: selectedImage,
             }}
             style={{
               height: Dimensions.get("window").height / 6,
@@ -100,6 +104,7 @@ const EditProfileScreen = () => {
         ref={(target) => (popupRef = target)}
         onTouchOutside={onCloseBottomSheet}
         title="Change Profile Picture"
+        onPhotoUpdate={imageTakenHandler}
       />
     </SafeAreaView>
   );
