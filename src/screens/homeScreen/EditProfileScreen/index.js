@@ -27,13 +27,7 @@ const EditProfileScreen = (props) => {
     popupRef.close();
   };
 
-  const [selectedImage, setSelectedImage] = useState(
-    "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-  );
-
-  const imageTakenHandler = (imagePath) => {
-    setSelectedImage(imagePath);
-  };
+  const imageTakenHandler = () => {};
 
   return (
     <SafeAreaView style={editProfilePageStyles.androidSafeArea}>
@@ -44,7 +38,8 @@ const EditProfileScreen = (props) => {
         >
           <ImageBackground
             source={{
-              uri: selectedImage,
+              uri:
+                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
             }}
             style={{
               height: Dimensions.get("window").height / 6,
@@ -104,7 +99,6 @@ const EditProfileScreen = (props) => {
         ref={(target) => (popupRef = target)}
         onTouchOutside={onCloseBottomSheet}
         title="Change Profile Picture"
-        onPhotoUpdate={imageTakenHandler}
       />
     </SafeAreaView>
   );
