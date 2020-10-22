@@ -69,7 +69,7 @@ export const feedPageStyles = StyleSheet.create({
     fontSize: 13.5,
     marginLeft: 5,
   },
-  singleDuetOptionIcon: {},
+  singleDuetOptionIcon: { top: 10 , marginRight: 16},
   duetImageContainer: {
     flex: 0.5,
   },
@@ -115,14 +115,13 @@ export const feedPageStyles = StyleSheet.create({
     marginRight: 10,
   },
   userNameCommentStyle: {
+    fontSize: 15,
     fontFamily: fonts.semibold_text,
-    fontSize: 16,
-    marginLeft: 5,
   },
   duetCommentTextStyle: {
     fontFamily: fonts.regular_text,
-    fontSize: 16,
-    marginLeft: 5,
+    fontSize: 15,
+    marginLeft: 3,
     flex: 1,
     flexWrap: "wrap",
   },
