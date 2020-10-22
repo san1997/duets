@@ -7,6 +7,7 @@ import * as Permissions from 'expo-permissions';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 
 import PreviewScreen from "./PreviewScreen";
+import DuetPreview from "./DuetPreview";
 import { UploadScreenStyles } from "./style.js"
 
 class UploadScreen extends Component {
@@ -14,6 +15,7 @@ class UploadScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      images: [],
       hasPermission: null,
       hasGalleryPermission: null,
       type: Camera.Constants.Type.back,
@@ -29,7 +31,7 @@ class UploadScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('component did update',this.props, prevProps.cameraOn, this.props.cameraOn);
+    console.log('component did update',prevProps.cameraOn, this.props.cameraOn);
     if (prevProps.cameraOn !== this.props.cameraOn) {
       this.setState({ cameraOn: this.props.cameraOn });
     }
@@ -63,13 +65,26 @@ class UploadScreen extends Component {
     );
   }
 
+  addImageToDuet = (image) => {
+    const images = this.state.images;
+    images.push(image);
+    if (images.length === 2) {
+      this.setState({images}, () => {
+        this.props.navigation.goBack();
+        this.props.navigation.navigate("DuetPreview", { images: images, uid: this.props.route.params.uid});
+      });
+    } else {
+      this.setState({images}, () => {this.props.navigation.goBack();console.log('number of images in duet', images.length);});
+    }
+  }
+
   async snapPhoto() {
     console.log('Button Pressed');
     if (this.camera) {
        console.log('Taking photo');
        const options = { quality: 1, base64: true, fixOrientation: true, exif: true};
        await this.camera.takePictureAsync().then(photo => {
-           this.props.navigation.navigate("PreviewScreen", {data: photo})
+           this.props.navigation.navigate("PreviewScreen", {data: photo, addImageToDuet: this.addImageToDuet})
            });
      }
     }
@@ -92,9 +107,8 @@ class UploadScreen extends Component {
       aspect: [4, 3],
       quality: 1,
     });
-    this.props
     console.log(result);
-    this.props.navigation.navigate("PreviewScreen", {data: result})
+    this.props.navigation.navigate("PreviewScreen", {data: result, addImageToDuet: this.addImageToDuet})
     if (!result.cancelled) {
       setImage(result.uri);
     }

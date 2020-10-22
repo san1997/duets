@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import UploadScreen from "../../UploadScreen";
 import PreviewScreen from "../../UploadScreen/PreviewScreen";
+import DuetPreview from "../../UploadScreen/DuetPreview";
 
 
 const UploadStack = createStackNavigator();
@@ -21,6 +22,10 @@ class UploadScreenWrapper extends React.Component {
           <UploadStack.Screen
             name="PreviewScreen"
             component={PreviewScreen}
+          />
+          <UploadStack.Screen
+            name="DuetPreview"
+            component={DuetPreview}
           />
         </UploadStack.Navigator>
       </NavigationContainer>
