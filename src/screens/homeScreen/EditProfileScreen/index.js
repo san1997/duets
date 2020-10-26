@@ -1,10 +1,8 @@
 import React, { useRef, useState } from "react";
 import {
-  Button,
   View,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   TouchableNativeFeedback,
   ImageBackground,
   TextInput,
@@ -18,6 +16,10 @@ import { editProfilePageStyles } from "./style";
 import BottomSheet from "./BottomSheet/index";
 
 const EditProfileScreen = (props) => {
+  const [profilePic, setProfilePic] = useState(
+    "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg"
+  );
+
   let popupRef = React.createRef();
   const onShowBottomSheet = () => {
     popupRef.show();
@@ -27,7 +29,9 @@ const EditProfileScreen = (props) => {
     popupRef.close();
   };
 
-  const imageTakenHandler = () => {};
+  const onProfilePicChangeHandler = (newProfilePic) => {
+    setProfilePic(newProfilePic);
+  };
 
   return (
     <SafeAreaView style={editProfilePageStyles.androidSafeArea}>
@@ -38,8 +42,7 @@ const EditProfileScreen = (props) => {
         >
           <ImageBackground
             source={{
-              uri:
-                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+              uri: profilePic,
             }}
             style={{
               height: Dimensions.get("window").height / 6,
@@ -99,6 +102,7 @@ const EditProfileScreen = (props) => {
         ref={(target) => (popupRef = target)}
         onTouchOutside={onCloseBottomSheet}
         title="Change Profile Picture"
+        onProfilePicChange={onProfilePicChangeHandler}
       />
     </SafeAreaView>
   );

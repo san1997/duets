@@ -2,7 +2,6 @@ import React from "react";
 import {
   Text,
   View,
-  Dimensions,
   Modal,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -17,7 +16,6 @@ export class BottomSheet extends React.Component {
     super(props);
     this.state = {
       show: false,
-      image: null,
     };
   }
 
@@ -45,26 +43,52 @@ export class BottomSheet extends React.Component {
   }
 
   openImagePicker = async () => {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("Permission to access camera roll is required!");
+      alert("Permission to access camera is required!");
       return;
     }
 
     let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.props.onProfilePicChange(result.uri);
     }
-    const { onPhotoUpdate } = this.props;
-    onPhotoUpdate.bind(this, this.setState({ image: result.uri }));
+    this.close();
+  };
+
+  openLibraryPicker = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera is required!");
+      return;
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.props.onProfilePicChange(result.uri);
+    }
+    this.close();
+  };
+
+  removeProfilePhoto = () => {
+    this.props.onProfilePicChange(
+      "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg"
+    );
     this.close();
   };
 
@@ -89,7 +113,7 @@ export class BottomSheet extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={this.openLibraryPicker}>
           <View style={{ flexDirection: "row" }}>
             <Ionicons name="md-photos" size={23} />
             {<Text>{"   "}</Text>}
@@ -98,7 +122,7 @@ export class BottomSheet extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={this.removeProfilePhoto}>
           <View style={{ flexDirection: "row" }}>
             <Ionicons name="md-trash" size={23} color="red" />
             {<Text>{"   "}</Text>}
