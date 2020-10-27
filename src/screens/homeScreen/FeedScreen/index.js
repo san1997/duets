@@ -82,9 +82,9 @@ class FeedScreen extends React.PureComponent {
   };
 
   renderCommentDiv = (item) => {
-    return !item.comment ? null : (
+    return !item.caption ? null : (
       <Text style={feedPageStyles.duetCommentTextStyle}>
-          <Text onPress={() => console.log('userName Pressed')} style={feedPageStyles.userNameCommentStyle}>{item.userName}</Text> {item.comment}
+          <Text onPress={() => console.log('userName Pressed')} style={feedPageStyles.userNameCommentStyle}>{item.userName}</Text> {item.caption}
           </Text>
     )};
 
