@@ -59,7 +59,9 @@ class DuetPreview extends Component {
         uid: this.props.route.params.uid,
         image1: image1URL,
         image2: image2URL,
-        caption: this.state.caption
+        caption: this.state.caption,
+        userName: this.props.route.params.userDetails.userId,
+        profilePic: this.props.route.params.userDetails.profilePicture
       }
       let options = {
         method: 'POST',
