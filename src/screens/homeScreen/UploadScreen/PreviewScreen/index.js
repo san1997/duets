@@ -1,20 +1,41 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Dimensions, Image, Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { PreviewScreenStyles } from "./style.js";
 
 class PreviewScreen extends Component {
 
-  renderActionItems() {
+  renderHeading() {
+    const images = this.props.route.params.images && this.props.route.params.images.length;
+    return (
+      <Text style={PreviewScreenStyles.heading}>
+        { images ? 'Second Upload' : 'First Upload' }
+      </Text>
+    );
+  }
+
+  renderCheckButton() {
+    return (
+        <TouchableOpacity
+          style={PreviewScreenStyles.actionItems}
+          onPress={() => {
+            this.props.route.params.addImageToDuet(this.props.route.params.data)
+          }}>
+          <AntDesign name="checkcircle" size={60} color="#84de02" />
+        </TouchableOpacity>
+    );
+  }
+
+  renderBackButton() {
     return (
       <TouchableOpacity
-        style={PreviewScreenStyles.actionItems}
+        style={PreviewScreenStyles.refresh}
         onPress={() => {
-          this.props.route.params.addImageToDuet(this.props.route.params.data)
+          this.props.navigation.goBack()
         }}>
-        <Ionicons name="ios-checkmark-circle-outline" size={80} color="green" />
+        <MaterialCommunityIcons name="backup-restore" size={60} color="#e4dfdf" />
       </TouchableOpacity>
     );
   }
@@ -29,9 +50,14 @@ class PreviewScreen extends Component {
           flex: 1
         }}
       >
-        <ImageViewer imageUrls={images}>
-        </ImageViewer>
-        {this.renderActionItems()}
+
+        <Image
+          style={{flex: 1}}
+          source={{uri: data.uri}}
+        />
+        {this.renderCheckButton()}
+        {this.renderBackButton()}
+        {this.renderHeading()}
       </View>
     );
   }

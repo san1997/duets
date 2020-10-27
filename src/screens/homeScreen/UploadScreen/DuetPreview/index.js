@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+import { DuetPreviewStyles } from './style';
 
 import { SERVER } from "../../../../constConfig/config";
-import facebookLogo from "../../../../assets/facebook.png";
+import colors from "../../../../constConfig/colors";
+import { feedPageStyles } from "../../FeedScreen/style"
 
 import * as firebase from "firebase";
 const firebaseConfig = {
@@ -55,7 +59,7 @@ class DuetPreview extends Component {
         uid: this.props.route.params.uid,
         image1: image1URL,
         image2: image2URL,
-        caption: 'Catchy caption here.'
+        caption: this.state.caption
       }
       let options = {
         method: 'POST',
@@ -74,29 +78,110 @@ class DuetPreview extends Component {
       console.log('error', err);
     })
 
+  }
 
-    // console.log('url', url);
-    // fetch(url, options)
-    // .then((response) => response.json())
-    // .then(res => {
-    //   console.log('this is resp', res);
-    // })
-    // .catch(err => {
-    //   console.log('err', err);
-    // })
+  headerline() {
+    return (
+      <View>
+        <View style={DuetPreviewStyles.topline}>
+          <TouchableOpacity style={DuetPreviewStyles.backButton} onPress={() => {this.props.navigation.goBack()}}>
+            <Ionicons name="ios-arrow-round-back" size={50} color="black" />
+          </TouchableOpacity>
+          <View style={DuetPreviewStyles.heading}>
+            <Text style={DuetPreviewStyles.fontHeading}>You are a step away </Text>
+          </View>
+          <TouchableOpacity style={DuetPreviewStyles.shareButton} onPress={() => {this.uploadDuet()}}>
+            <Text style={DuetPreviewStyles.fontShare}>Share</Text>
+          </TouchableOpacity>
+
+        </View>
+        <View
+        style={DuetPreviewStyles.headline}
+        />
+      </View>
+    );
+  }
+
+  addCaption() {
+    return (
+      <View style={{ flex: 3}}>
+        <Image
+          style={DuetPreviewStyles.profilePic}
+          source={{uri: this.props.route.params.userDetails.profilePicture}}
+        />
+        <TextInput
+          placeholder={"Add a caption.."}
+          placeholderTextColor={colors.textLightColor}
+          style={DuetPreviewStyles.captionbox}
+          onChangeText={(inputText) => this.setState({caption: inputText})}
+          multiline={true}
+        />
+        <View
+        style={DuetPreviewStyles.captionline}
+        />
+      </View>
+    )
+  }
+
+  showDuet() {
+    const image1 = this.props.route.params.images[0].uri;
+    const image2 = this.props.route.params.images[1].uri;
+    return (
+      <View style={DuetPreviewStyles.showDuet}>
+      <View
+        style={[feedPageStyles.flex_row, feedPageStyles.singleDuetContainer]}
+      >
+        <TouchableOpacity
+          style={feedPageStyles.duetImageContainer}
+          activeOpacity={0.8}
+        >
+          <Image
+            source={{ uri: image1 }}
+            style={feedPageStyles.duetLeftImageStyle}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={feedPageStyles.duetImageContainer}
+          activeOpacity={0.8}
+        >
+          <Image
+            source={{ uri: image2 }}
+            style={feedPageStyles.duetRightImageStyle}
+          />
+        </TouchableOpacity>
+      </View>
+      </View>
+    );
+  }
+
+  renderDuetNumber(){
+    const previousDuets = this.props.route.params.userDetails.duets.length;
+    const number = previousDuets + 1;
+    let superScript = 'th';
+    if (number%10 === 1) {
+      superScript = 'st';
+    } else if (number%10 === 2) {
+      superScript = 'nd';
+    } else if (number%10 === 3) {
+      superScript = 'rd';
+    }
+    return (
+      <View style={DuetPreviewStyles.duetNumber}>
+        <Text style={DuetPreviewStyles.duetNumberText}>{number}</Text>
+        <Text style={DuetPreviewStyles.duetNumberTextSuper}>{superScript}</Text>
+      </View>
+    )
   }
 
   render(){
-    console.log('prosp', this.props);
     return (
-      <TouchableOpacity
-        style={{alignItems: 'center', top: '50%'}}
-        onPress={() => {
-          this.uploadDuet()
-        }}>
-        <Text style={{backgroundColor: 'pink'}}>UPLOAD DUET</Text>
-      </TouchableOpacity>
-    );
+      <View style={{flex: 1}}>
+      {this.headerline()}
+      {this.addCaption()}
+      {this.showDuet()}
+      {this.renderDuetNumber()}
+      </View>
+    )
   }
 }
 

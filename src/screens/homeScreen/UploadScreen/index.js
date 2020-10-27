@@ -66,8 +66,11 @@ class UploadScreen extends Component {
   }
 
   addImageToDuet = (image) => {
-    const images = this.state.images;
+    let images = this.state.images;
     images.push(image);
+    if (images.length > 2) {
+      images = images.slice(2);
+    }
     if (images.length === 2) {
       this.setState({images}, () => {
         this.props.navigation.goBack();
@@ -84,7 +87,7 @@ class UploadScreen extends Component {
        console.log('Taking photo');
        const options = { quality: 1, base64: true, fixOrientation: true, exif: true};
        await this.camera.takePictureAsync().then(photo => {
-           this.props.navigation.navigate("PreviewScreen", {data: photo, addImageToDuet: this.addImageToDuet})
+           this.props.navigation.navigate("PreviewScreen", {data: photo, addImageToDuet: this.addImageToDuet, images: this.state.images})
            });
      }
     }
@@ -104,12 +107,11 @@ class UploadScreen extends Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
     console.log(result);
-    this.props.navigation.navigate("PreviewScreen", {data: result, addImageToDuet: this.addImageToDuet})
     if (!result.cancelled) {
+      this.props.navigation.navigate("PreviewScreen", {data: result, addImageToDuet: this.addImageToDuet, images: this.state.images})
       setImage(result.uri);
     }
   }
@@ -163,6 +165,7 @@ class UploadScreen extends Component {
   }
 
   render() {
+    console.log('current images are', this.state.images);
     return (
       this.renderCamera()
     );
