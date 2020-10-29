@@ -20,7 +20,7 @@ class UploadScreen extends Component {
       hasGalleryPermission: null,
       type: Camera.Constants.Type.back,
       backgroundColor: '#fff',
-      cameraOn: true
+      cameraOn: false
     };
   }
 
@@ -31,7 +31,7 @@ class UploadScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('component did update',prevProps.cameraOn, this.props.cameraOn);
+    console.log('component did update',this.props.cameraOn);
     if (prevProps.cameraOn !== this.props.cameraOn) {
       this.setState({ cameraOn: this.props.cameraOn });
     }
@@ -74,7 +74,7 @@ class UploadScreen extends Component {
     if (images.length === 2) {
       this.setState({images}, () => {
         this.props.navigation.goBack();
-        this.props.navigation.navigate("DuetPreview", { images: images, uid: this.props.route.params.uid});
+        this.props.navigation.navigate("DuetPreview", { images: images, uid: this.props.uid});
       });
     } else {
       this.setState({images}, () => {this.props.navigation.goBack();console.log('number of images in duet', images.length);});
@@ -109,7 +109,6 @@ class UploadScreen extends Component {
       allowsEditing: true,
       quality: 1,
     });
-    console.log(result);
     if (!result.cancelled) {
       this.props.navigation.navigate("PreviewScreen", {data: result, addImageToDuet: this.addImageToDuet, images: this.state.images})
       setImage(result.uri);
