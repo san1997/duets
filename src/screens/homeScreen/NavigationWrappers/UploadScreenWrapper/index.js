@@ -18,7 +18,8 @@ class UploadScreenWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userDetails: null
+      userDetails: null,
+      cameraOn: false
     }
   }
 
@@ -44,13 +45,19 @@ class UploadScreenWrapper extends React.Component {
   }
 
   render() {
+    const propsObj = {
+      ...this.props,
+      cameraOn: this.props.cameraOn,
+    };
     return (
       <NavigationContainer independent="true">
         <UploadStack.Navigator
           initialRouteName="UploadScreen"
           screenOptions={{ headerShown: false }}
         >
-          <UploadStack.Screen name="UploadScreen" component={UploadScreen} initialParams={{...this.props}}/>
+          <UploadStack.Screen name="UploadScreen">
+            {(props) => <UploadScreen {...props} {...propsObj} />}
+          </UploadStack.Screen>
           <UploadStack.Screen
             name="PreviewScreen"
             component={PreviewScreen}
