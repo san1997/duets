@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import { DuetPreviewStyles } from './style';
 
 import { SERVER } from "../../../../constConfig/config";
 import colors from "../../../../constConfig/colors";
-import { feedPageStyles } from "../../FeedScreen/style"
+import { feedPageStyles } from "../../FeedScreen/style";
+import Loading from "../../../../../components/Loading";
 
 import * as firebase from "firebase";
 const firebaseConfig = {
@@ -24,6 +26,12 @@ var storage = firebase.storage();
 
 class DuetPreview extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
+  }
   uploadDuet(){
     const images = this.props.route.params.images;
     const url = `${SERVER}/duets-upload`;
@@ -31,7 +39,7 @@ class DuetPreview extends Component {
     let randomString = Math.random().toString(36).slice(2);
     const metadata = { contentType: 'image/jpeg' };
 
-
+    this.setState({ loading: true});
     fetch(images[0].uri)
     .then(response => {
       return response.blob();
@@ -75,10 +83,35 @@ class DuetPreview extends Component {
     .then((response) => response.json())
     .then(data => {
       console.log('data', data);
+      this.showAlertMessage('Upload Successful!', 'success');
     })
     .catch(err => {
       console.log('error', err);
+      this.showAlertMessage('Failed to upload Duet! Please try again.', 'fail')
     })
+
+  }
+
+  showAlertMessage(message, flag) {
+    let type;
+    if (flag === 'success') {
+      type = 'success';
+      this.setState({loading: false}, () => {
+        showMessage({
+        message,
+        type,
+        duration: 3000
+        });
+        this.props.navigation.goBack();
+      });
+    } else if (flag === 'fail') {
+      type = 'warning';
+      this.setState({loading: false}, () => showMessage({
+        message,
+        type,
+        duration: 3000
+      }));
+    }
 
   }
 
@@ -176,6 +209,9 @@ class DuetPreview extends Component {
   }
 
   render(){
+    if (this.state.loading) {
+      return <Loading />
+    }
     return (
       <View style={{flex: 1}}>
       {this.headerline()}
