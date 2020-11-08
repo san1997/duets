@@ -32,6 +32,7 @@ class FeedScreen extends React.PureComponent {
       isLoading: false,
       uid: this.props ? this.props.route.params.uid : 0,
       refresh: !refresh,
+      isRefreshing: false,
     };
   }
 
@@ -62,7 +63,13 @@ class FeedScreen extends React.PureComponent {
       });
   };
 
-  getDataFromFirebase = async () => {
+  onPullRefresh() {
+    this.setState({ isRefreshing: true }, () => {
+      this.getDataFromFirebase(true);
+    });
+  }
+
+  getDataFromFirebase = async (isPull) => {
     const queryObj = {
       userId: this.state.uid,
     };
@@ -72,8 +79,9 @@ class FeedScreen extends React.PureComponent {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
-          data: this.state.data.concat(responseJson),
+          data: isPull ? responseJson : this.state.data.concat(responseJson),
           isLoading: false,
+          isRefreshing: false,
         });
       });
   };
@@ -297,8 +305,8 @@ class FeedScreen extends React.PureComponent {
             onEndReachedThreshold={2}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
-            // refreshing={true}
-            // onRefresh={this.handleRefresh}
+            onRefresh={() => this.onPullRefresh()}
+            refreshing={this.state.isRefreshing}
           />
         </View>
       </SafeAreaView>
