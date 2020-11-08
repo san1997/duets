@@ -306,6 +306,8 @@ class FeedScreen extends React.PureComponent {
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
             onRefresh={() => this.onPullRefresh()}
+            /* we can automate refresh icons using RefreshControl 
+            Refer - https://medium.com/enappd/refreshcontrol-pull-to-refresh-in-react-native-apps-dfe779118f75 */
             refreshing={this.state.isRefreshing}
           />
         </View>
