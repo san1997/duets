@@ -19,11 +19,20 @@ import colors from "../../../constConfig/colors";
 import { feedPageStyles } from "./style.js";
 
 import { SERVER } from "../../../constConfig/config";
+import queryString from "query-string";
+
+const refresh = 1;
 
 class FeedScreen extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { data: [], page: 1, isLoading: false, uid: (this.props) ? this.props.route.params.uid: 0 };
+    this.state = {
+      data: [],
+      page: 1,
+      isLoading: false,
+      uid: this.props ? this.props.route.params.uid : 0,
+      refresh: !refresh,
+    };
   }
 
   switchToFullImagePage(imgData, startFromBack) {
@@ -54,10 +63,11 @@ class FeedScreen extends React.PureComponent {
   };
 
   getDataFromFirebase = async () => {
-    // const queryObj = {
-    //   userId: this.state.uid
-    // }
-    const url = `${SERVER}/getDuets`;
+    const queryObj = {
+      userId: this.state.uid,
+    };
+    /* we can separate likes number and likers, we are getting likers in this call unnecessarily */
+    const url = `${SERVER}/getDuets?${queryString.stringify(queryObj)}`;
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -70,7 +80,10 @@ class FeedScreen extends React.PureComponent {
 
   feedMoreHandling = () => {
     // this.setState({ page: this.state.page + 1, isLoading: true }, this.getData);
-    this.setState({ page: this.state.page + 1, isLoading: true }, this.getDataFromFirebase);
+    this.setState(
+      { page: this.state.page + 1, isLoading: true },
+      this.getDataFromFirebase
+    );
   };
 
   renderLoadMore = () => {
@@ -84,11 +97,56 @@ class FeedScreen extends React.PureComponent {
   renderCommentDiv = (item) => {
     return !item.caption ? null : (
       <Text style={feedPageStyles.duetCommentTextStyle}>
-          <Text onPress={() => console.log('userName Pressed')} style={feedPageStyles.userNameCommentStyle}>{item.userName}</Text> {item.caption}
-          </Text>
-    )};
+        <Text
+          onPress={() => console.log("userName Pressed")}
+          style={feedPageStyles.userNameCommentStyle}
+        >
+          {item.userName}
+        </Text>{" "}
+        {item.caption}
+      </Text>
+    );
+  };
 
-  renderDuet = ({ item }) => {
+  likeClick(user, clickedImg, currentClick, duetId, item, index) {
+    if (clickedImg == currentClick) {
+      item.clickedDuet = 0;
+      if (clickedImg == 1) item.firstLikesSize = item.firstLikesSize - 1;
+      else if (clickedImg == 2) item.secondLikesSize = item.secondLikesSize - 1;
+    } else {
+      // incrementing the new click count
+      item.clickedDuet = currentClick;
+      if (currentClick == 1) item.firstLikesSize = item.firstLikesSize + 1;
+      else if (currentClick == 2)
+        item.secondLikesSize = item.secondLikesSize + 1;
+
+      // decrementing the already clicked count
+      if (clickedImg == 1) item.firstLikesSize = item.firstLikesSize - 1;
+      else if (clickedImg == 2) item.secondLikesSize = item.secondLikesSize - 1;
+    }
+    this.state.data[index] = item;
+    this.setState({
+      data: this.state.data,
+      refresh: !this.state.refresh,
+    });
+
+    const queryObj = {
+      userId: user,
+      clickedImg: clickedImg,
+      currentClick: currentClick,
+      duetId: duetId,
+    };
+    const url = `${SERVER}/isDuetClicked?${queryString.stringify(queryObj)}`;
+    console.log(url);
+    fetch(url)
+      .then((response) => response.text())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => console.error(error));
+  }
+
+  renderDuet = ({ item, index }) => {
     return (
       <View style={feedPageStyles.singleDuetStyle}>
         <View
@@ -97,7 +155,11 @@ class FeedScreen extends React.PureComponent {
           <View style={feedPageStyles.userThumbnailContainer}>
             <TouchableOpacity>
               <Image
-                source={{ uri: (item.profilePicture ? item.profilePicture : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg")}}
+                source={{
+                  uri: item.profilePicture
+                    ? item.profilePicture
+                    : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                }}
                 style={feedPageStyles.userThumbnail}
               />
             </TouchableOpacity>
@@ -105,11 +167,11 @@ class FeedScreen extends React.PureComponent {
 
           <View style={feedPageStyles.userNameContainer}>
             <TouchableOpacity>
-                <Text style={feedPageStyles.userNameStyle}>{item.userName}</Text>
+              <Text style={feedPageStyles.userNameStyle}>{item.userName}</Text>
             </TouchableOpacity>
             <Text style={feedPageStyles.duetUploadTimeStyle}>10h</Text>
           </View>
-          <View style={{ flex: 1, flexDirection: "row-reverse"}}>
+          <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[feedPageStyles.singleDuetOptionIcon]}>
               <Icon name="more-horizontal" color={colors.black} size={30} />
             </TouchableOpacity>
@@ -122,7 +184,10 @@ class FeedScreen extends React.PureComponent {
             style={feedPageStyles.duetImageContainer}
             activeOpacity={0.8}
             onPress={() =>
-              this.switchToFullImagePage([item.first.imageLink, item.second.imageLink], false)
+              this.switchToFullImagePage(
+                [item.first.imageLink, item.second.imageLink],
+                false
+              )
             }
           >
             <Image
@@ -134,7 +199,10 @@ class FeedScreen extends React.PureComponent {
             style={feedPageStyles.duetImageContainer}
             activeOpacity={0.8}
             onPress={() =>
-              this.switchToFullImagePage([item.second.imageLink, item.first.imageLink], true)
+              this.switchToFullImagePage(
+                [item.second.imageLink, item.first.imageLink],
+                true
+              )
             }
           >
             <Image
@@ -147,18 +215,54 @@ class FeedScreen extends React.PureComponent {
           style={[feedPageStyles.flex_row, feedPageStyles.duetHeartsContainer]}
         >
           <View style={[feedPageStyles.flex_row, feedPageStyles.duetLeftHeart]}>
-            <Text style={feedPageStyles.duetLeftHeartCounter}>1920</Text>
-            <TouchableOpacity style={[feedPageStyles.duetLeftHeartButton]}>
-              <AntIcon name="heart" size={25} />
+            <Text style={feedPageStyles.duetLeftHeartCounter}>
+              {item.firstLikesSize}
+            </Text>
+            <TouchableOpacity
+              style={[feedPageStyles.duetLeftHeartButton]}
+              onPress={() =>
+                this.likeClick(
+                  this.state.uid,
+                  item.clickedDuet,
+                  1,
+                  item.duetId,
+                  item,
+                  index
+                )
+              }
+            >
+              {item.clickedDuet == 1 ? (
+                <AntIcon name="heart" size={25} />
+              ) : (
+                <AntIcon name="hearto" size={25} />
+              )}
             </TouchableOpacity>
           </View>
           <View
             style={[feedPageStyles.flex_row, feedPageStyles.duetRightHeart]}
           >
-            <TouchableOpacity style={[feedPageStyles.duetRightHeartButton]}>
-              <AntIcon name="hearto" size={25} />
+            <TouchableOpacity
+              style={[feedPageStyles.duetRightHeartButton]}
+              onPress={() =>
+                this.likeClick(
+                  this.state.uid,
+                  item.clickedDuet,
+                  2,
+                  item.duetId,
+                  item,
+                  index
+                )
+              }
+            >
+              {item.clickedDuet == 2 ? (
+                <AntIcon name="heart" size={25} />
+              ) : (
+                <AntIcon name="hearto" size={25} />
+              )}
             </TouchableOpacity>
-            <Text style={feedPageStyles.duetRightHeartCounter}>396</Text>
+            <Text style={feedPageStyles.duetRightHeartCounter}>
+              {item.secondLikesSize}
+            </Text>
           </View>
         </View>
         <View
@@ -187,11 +291,13 @@ class FeedScreen extends React.PureComponent {
             style={feedPageStyles.duetContainer}
             ref={this.props.flatListRef}
             data={this.state.data}
+            extraData={this.state.refresh}
             renderItem={this.renderDuet}
             keyExtractor={(item, index) => index.toString()}
             onEndReachedThreshold={2}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
+            // refreshing={true}
             // onRefresh={this.handleRefresh}
           />
         </View>
