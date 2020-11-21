@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { useScrollToTop } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
@@ -15,6 +16,7 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 
 import strings from "../../../constConfig/strings";
 import colors from "../../../constConfig/colors";
+import CacheImage from "../../../constConfig/cacheImage";
 
 import { feedPageStyles } from "./style.js";
 
@@ -29,6 +31,7 @@ class FeedScreen extends React.PureComponent {
     this.state = {
       data: [],
       page: 1,
+      limit: 10,
       isLoading: false,
       uid: this.props ? this.props.route.params.uid : 0,
       refresh: !refresh,
@@ -63,23 +66,28 @@ class FeedScreen extends React.PureComponent {
       });
   };
 
-  onPullRefresh() {
-    this.setState({ isRefreshing: true }, () => {
+  onPullRefresh = () => {
+    this.setState({ isRefreshing: true, page: 1 }, () => {
       this.getDataFromFirebase(true);
     });
-  }
+  };
 
   getDataFromFirebase = async (isPull) => {
     const queryObj = {
       userId: this.state.uid,
+      page: this.state.page,
+      limit: this.state.limit,
     };
     /* we can separate likes number and likers, we are getting likers in this call unnecessarily */
     const url = `${SERVER}/getDuets?${queryString.stringify(queryObj)}`;
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
+        var tempData = [];
         this.setState({
-          data: isPull ? responseJson : this.state.data.concat(responseJson),
+          data: isPull
+            ? tempData.concat(responseJson)
+            : this.state.data.concat(responseJson),
           isLoading: false,
           isRefreshing: false,
         });
@@ -145,11 +153,10 @@ class FeedScreen extends React.PureComponent {
       duetId: duetId,
     };
     const url = `${SERVER}/isDuetClicked?${queryString.stringify(queryObj)}`;
-    console.log(url);
     fetch(url)
       .then((response) => response.text())
       .then((res) => {
-        console.log(res);
+        // do nothing, it just a success response
       })
       .catch((error) => console.error(error));
   }
@@ -198,8 +205,10 @@ class FeedScreen extends React.PureComponent {
               )
             }
           >
-            <Image
-              source={{ uri: item.first.imageLink }}
+            <CacheImage
+              uri={item.first.imageLink}
+              key={item.first.imageLink}
+              // key change will help in pull refresh, don't remove it. https://stackoverflow.com/a/41618950
               style={feedPageStyles.duetLeftImageStyle}
             />
           </TouchableOpacity>
@@ -213,8 +222,10 @@ class FeedScreen extends React.PureComponent {
               )
             }
           >
-            <Image
-              source={{ uri: item.second.imageLink }}
+            <CacheImage
+              uri={item.second.imageLink}
+              key={item.second.imageLink}
+              // key change will help in pull refresh, don't remove it. https://stackoverflow.com/a/41618950
               style={feedPageStyles.duetRightImageStyle}
             />
           </TouchableOpacity>
@@ -305,10 +316,14 @@ class FeedScreen extends React.PureComponent {
             onEndReachedThreshold={2}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
-            onRefresh={() => this.onPullRefresh()}
             /* we can automate refresh icons using RefreshControl 
             Refer - https://medium.com/enappd/refreshcontrol-pull-to-refresh-in-react-native-apps-dfe779118f75 */
-            refreshing={this.state.isRefreshing}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={this.onPullRefresh}
+              />
+            }
           />
         </View>
       </SafeAreaView>
