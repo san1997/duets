@@ -126,9 +126,7 @@ class LoginPage extends React.Component {
           </TouchableOpacity>
 
           <View style={loginStyles.thirdPartyLogin}>
-            <ThirdPartyLogin
-              loginUser={this.props.loginUser}
-            />
+            <ThirdPartyLogin loginUser={this.props.loginUser} />
           </View>
 
           <View style={loginStyles.orDivContainer}>
@@ -144,7 +142,6 @@ class LoginPage extends React.Component {
             </Text>
           </TouchableOpacity>
         </LoginPageStyles>
-
       </SafeAreaView>
     );
   }
