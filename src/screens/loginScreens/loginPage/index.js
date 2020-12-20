@@ -39,8 +39,8 @@ class LoginPage extends React.Component {
     });
   }
 
-  switchToRegistrationPage() {
-    this.props.navigation.navigate("RegistrationPage", {
+  switchToUserIdConfirmationPage() {
+    this.props.navigation.navigate("UserIdConfirmationPage", {
       userDetails: this.state.logDetails,
       loginUser: this.props.loginUser,
     });
@@ -135,7 +135,7 @@ class LoginPage extends React.Component {
 
           <TouchableOpacity
             style={loginStyles.signupHeadingContainer}
-            onPress={() => this.switchToRegistrationPage()}
+            onPress={() => this.switchToUserIdConfirmationPage()}
           >
             <Text style={loginStyles.signupHeading}>
               {strings.signupHeading}

@@ -6,18 +6,18 @@ import * as FileSystem from "expo-file-system";
   - with this cacheImage component call please add key as well to update componentDidMount. 
   - Need to add cache removal logic as well.
 */
-
 class CacheImage extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       source: null,
-      _isMounted: false,
     };
   }
 
   componentDidMount = async () => {
-    this.state._isMounted = true;
+    this._isMounted = true;
     const { uri } = this.props;
     const name = shortHash.unique(uri);
     const path = `${FileSystem.cacheDirectory}${name}`;
@@ -40,7 +40,7 @@ class CacheImage extends React.Component {
   };
 
   componentWillUnmount() {
-    this.state._isMounted = false;
+    this._isMounted = false;
   }
 
   render() {

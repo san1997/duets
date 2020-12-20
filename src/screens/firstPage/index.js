@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React from "react";
+import { Text } from "react-native";
 
 import LoginPage from "../loginScreens/loginPage";
 import HomeScreen from "../homeScreen";
@@ -9,26 +9,24 @@ class FirstPage extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-      userId: null
+      userId: null,
     };
     this.loginUser = this.loginUser.bind(this);
   }
   loginUser = (userId) => {
     this.setState({
       loggedIn: true,
-      userId
+      userId,
     });
-  }
+  };
   render() {
-    return (
-       this.state.loggedIn ?
-       <HomeScreen
-        uid={this.state.userId}
-       /> :
-       <LoginPage
+    return this.state.loggedIn ? (
+      <HomeScreen uid={this.state.userId} />
+    ) : (
+      <LoginPage
         navigation={this.props.navigation}
         loginUser={this.loginUser}
-       />
+      />
     );
   }
 }
