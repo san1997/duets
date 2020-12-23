@@ -13,4 +13,5 @@ export default {
   blackTimeColor: "#333333",
   maroon: "#800000",
   userIdColor: "#999da0",
+  anotherGrey: "#616161",
 };
