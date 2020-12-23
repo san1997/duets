@@ -10,27 +10,34 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cameraOn: false
-    }
+      cameraOn: false,
+    };
   }
 
   handleIndex(ind) {
-      if (ind === 0) {
-        this.setState({cameraOn: true})
-      } else {
-        this.setState({cameraOn: false})
-      }
+    if (ind === 0) {
+      this.setState({ cameraOn: true });
+    } else {
+      this.setState({ cameraOn: false });
+    }
   }
   render() {
     return (
-      <Swiper loop={false}
+      <Swiper
+        loop={false}
         showsPagination={false}
         index={1}
         onIndexChanged={(ind) => this.handleIndex(ind)}
       >
-        <UploadScreenWrapper uid={this.props.uid} cameraOn={this.state.cameraOn}/>
-        <FeedScreenWrapper uid={this.props.uid}/>
-        <ProfileScreenWrapper uid={this.props.uid}/>
+        <UploadScreenWrapper
+          uid={this.props.uid}
+          cameraOn={this.state.cameraOn}
+        />
+        <FeedScreenWrapper uid={this.props.uid} />
+        <ProfileScreenWrapper
+          users_uid={this.props.uid}
+          profile_uid={this.props.uid}
+        />
       </Swiper>
     );
   }
