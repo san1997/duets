@@ -36,6 +36,7 @@ import PasswordPage from "./src/screens/loginScreens/passwordPage";
 import RegistrationPage from "./src/screens/loginScreens/registrationPage";
 import HomeScreen from "./src/screens/homeScreen";
 import FirstPage from "./src/screens/firstPage";
+import UserIdConfirmationPage from "./src/screens/loginScreens/userIdConfirmPage";
 
 /*Optionally import the services that you want to use */
 //import "firebase/auth";
@@ -96,6 +97,10 @@ export default class App extends React.Component {
             <Stack.Screen
               name="RegistrationPage"
               component={RegistrationPage}
+            />
+            <Stack.Screen
+              name="UserIdConfirmationPage"
+              component={UserIdConfirmationPage}
             />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="FirstPage" component={FirstPage} />

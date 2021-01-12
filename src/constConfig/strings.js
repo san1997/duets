@@ -21,4 +21,6 @@ export default {
   loginButtonText: "Log in",
   dividerLine: "─────────────────",
   editProfile: "Edit Profile",
+  goString: "Go with",
+  selectedUserId: "This userId has been taken.",
 };

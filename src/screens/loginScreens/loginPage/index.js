@@ -39,8 +39,8 @@ class LoginPage extends React.Component {
     });
   }
 
-  switchToRegistrationPage() {
-    this.props.navigation.navigate("RegistrationPage", {
+  switchToUserIdConfirmationPage() {
+    this.props.navigation.navigate("UserIdConfirmationPage", {
       userDetails: this.state.logDetails,
       loginUser: this.props.loginUser,
     });
@@ -126,9 +126,7 @@ class LoginPage extends React.Component {
           </TouchableOpacity>
 
           <View style={loginStyles.thirdPartyLogin}>
-            <ThirdPartyLogin
-              loginUser={this.props.loginUser}
-            />
+            <ThirdPartyLogin loginUser={this.props.loginUser} />
           </View>
 
           <View style={loginStyles.orDivContainer}>
@@ -137,14 +135,13 @@ class LoginPage extends React.Component {
 
           <TouchableOpacity
             style={loginStyles.signupHeadingContainer}
-            onPress={() => this.switchToRegistrationPage()}
+            onPress={() => this.switchToUserIdConfirmationPage()}
           >
             <Text style={loginStyles.signupHeading}>
               {strings.signupHeading}
             </Text>
           </TouchableOpacity>
         </LoginPageStyles>
-
       </SafeAreaView>
     );
   }
