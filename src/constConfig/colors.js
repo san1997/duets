@@ -14,4 +14,6 @@ export default {
   maroon: "#800000",
   userIdColor: "#999da0",
   anotherGrey: "#616161",
+  followButtonColor: "#FFCEA3",
+  followingButtonColor: "#A3D4FF",
 };

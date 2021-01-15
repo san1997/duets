@@ -21,39 +21,23 @@ class ProfileScreenWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userDetails: null,
-      isLoading: true,
-      isUsersProfile: this.props.profile_uid == this.props.users_uid,
+      profile_uid: this.props.profile_uid
+        ? this.props.profile_uid
+        : this.props.route.params.profile_uid,
+      users_uid: this.props.users_uid
+        ? this.props.users_uid
+        : this.props.route.params.users_uid,
     };
   }
   componentDidMount() {
     this._isMounted = true;
-    this.fetchUserDetails();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
   }
 
-  fetchUserDetails() {
-    const queryObj = {
-      userId: this.props.profile_uid,
-    };
-    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}`;
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({ userDetails: json });
-      })
-      .catch((error) => console.error(error))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
-  }
   render() {
-    if (this.state.isLoading) {
-      return <AppLoading />;
-    }
     return (
       <NavigationContainer independent="true">
         <ProfileStack.Navigator
@@ -63,13 +47,12 @@ class ProfileScreenWrapper extends React.Component {
           <ProfileStack.Screen
             name="ProfileScreen"
             initialParams={{
-              userDetails: this.state.userDetails,
-              profile_uid: this.props.profile_uid,
-              users_uid: this.props.users_uid,
-              isUsersProfile: this.state.isUsersProfile,
+              profile_uid: this.state.profile_uid,
+              users_uid: this.state.users_uid,
+              isUsersProfile: this.state.users_uid == this.state.profile_uid,
             }}
             options={{
-              headerShown: true,
+              headerShown: false,
               /*Will remove title and fontsize later*/
               title: "Profile Screen",
               headerTitleStyle: {

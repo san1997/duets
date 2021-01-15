@@ -13,12 +13,16 @@ export const ProfilePageStyles = styled.View`
 export const profilePageStyles = StyleSheet.create({
   profilePageContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
+  },
+  profilePageHeaderContainer: {
+    flex: 1,
+    // backgroundColor: "#f0f8ff",
   },
   androidSafeArea: {
     flex: 1,
-    // paddingTop: Platform.OS === "android" ? 25 : 0,
-    // alignItems: "center",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+    backgroundColor: "#f0f8ff",
   },
   headerContainer: {
     height: "7%",
@@ -39,11 +43,11 @@ export const profilePageStyles = StyleSheet.create({
     top: "78%",
     position: "absolute",
   },
-  flex_row: {
-    flexDirection: "row",
-    flex: 1,
+  FollowButtonStyle: {
+    paddingLeft: 8,
+    paddingTop: 16,
   },
-  userInfoSection: { marginTop: 10 },
+  userInfoSection: { paddingTop: 20, backgroundColor: "#f0f8ff" },
   title: {
     fontSize: 15,
     fontWeight: "bold",
@@ -54,6 +58,10 @@ export const profilePageStyles = StyleSheet.create({
   },
   captionContainer: {
     marginTop: -5,
+    alignItems: "center",
+  },
+  NameContainer: {
+    alignItems: "center",
   },
   row: {
     flexDirection: "row",
@@ -71,7 +79,9 @@ export const profilePageStyles = StyleSheet.create({
     alignItems: "center",
   },
   infoBoxWrapperContainer: {
-    marginTop: 15,
+    flex: 0.5,
+    backgroundColor: "#f0f8ff",
+    paddingTop: 15,
     marginBottom: 15,
   },
   infoBox: {
@@ -96,7 +106,8 @@ export const profilePageStyles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
-    marginTop: 8,
+    marginTop: 12,
+    alignContent: "center",
   },
   uploadContainer: {
     // marginTop: 15,
@@ -205,5 +216,29 @@ export const profilePageStyles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  // FollowContainer: {
+  //   paddingTop: 2,
+  //   paddingBottom: 2,
+  // },
+  followButtonContainer: {
+    width: "100%",
+    padding: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 20,
+    alignItems: "center",
+    top: "20%",
+    // backgroundColor: "#111",
+  },
+  followButtonTextStyle: {
+    fontFamily: fonts.regular_text,
+    color: "#fff",
+    fontSize: 15,
+  },
+  followingButtonTextStyle: {
+    fontFamily: fonts.regular_text,
+    color: "#fff",
+    fontSize: 15,
   },
 });
