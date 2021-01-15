@@ -2,17 +2,19 @@ import React from "react";
 import {
   Text,
   View,
-  StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
   Image,
   FlatList,
   ActivityIndicator,
-  ScrollView,
+  RefreshControl,
 } from "react-native";
+import { AppLoading } from "expo";
+import { useScrollToTop } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import AntIcon from "react-native-vector-icons/AntDesign";
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { Avatar, Title, Caption } from "react-native-paper";
 
 import { SERVER } from "../../../constConfig/config.js";
@@ -25,20 +27,27 @@ import CacheImage from "../../../constConfig/cacheImage";
 
 import { profilePageStyles } from "./style.js";
 
+const refresh = 1;
+
 class ProfileScreen extends React.PureComponent {
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
-      userDetails: this.props.route.params.userDetails,
+      userDetails: null,
       profile_uid: this.props.route.params.profile_uid,
       users_uid: this.props.route.params.users_uid,
       isUsersProfile: this.props.route.params.isUsersProfile,
       data: [{}],
       page: 1,
-      limit: 10,
-      isLoading: false,
+      limit: 3,
+      refresh: !refresh,
+      isRefreshing: false,
+      isLoading: true,
+      isUserDataLoading: true,
+      initialFollowState: false,
+      followBackgroundColor: null,
     };
   }
 
@@ -56,6 +65,8 @@ class ProfileScreen extends React.PureComponent {
   componentDidMount() {
     // this.setState(this.setUploadAsFirstData);
     this._isMounted = true;
+    this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
+    this.getInitialFollowState();
     this.setState({ isLoading: true }, this.getDataFromFirebase);
   }
 
@@ -63,20 +74,105 @@ class ProfileScreen extends React.PureComponent {
     this._isMounted = false;
   }
 
-  getDataFromFirebase = async () => {
+  onPullRefresh = () => {
+    this.setState({ isRefreshing: true, page: 1 }, () => {
+      this.getDataFromFirebase(true);
+    });
+  };
+
+  fetchUserDetails() {
+    const queryObj = {
+      userId: this.state.profile_uid,
+    };
+    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ userDetails: json });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isUserDataLoading: false });
+      });
+  }
+
+  getInitialFollowState = () => {
+    const queryObj = {
+      userId: this.state.users_uid,
+      profileId: this.state.profile_uid,
+      getInitialState: 0,
+      followClick: 0,
+    };
+    const url = `${SERVER}/followHandler?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.text())
+      .then((res) => {
+        if (res == "1") {
+          this.setState({
+            initialFollowState: true,
+            followBackgroundColor: colors.followButtonColor,
+          });
+        } else {
+          this.setState({
+            initialFollowState: false,
+            followBackgroundColor: colors.followingButtonColor,
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+  followButtonClickHandler = () => {
+    const queryObj = {
+      userId: this.state.users_uid,
+      profileId: this.state.profile_uid,
+      getInitialState: this.state.initialFollowState ? 1 : 0,
+      followClick: 1,
+    };
+    const url = `${SERVER}/followHandler?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.text())
+      .then((res) => {
+        if (this.state.initialFollowState) {
+          const idx = this.state.userDetails.follower.indexOf(
+            this.state.users_uid
+          );
+          this.state.userDetails.follower.splice(idx, 1);
+          this.setState({
+            userDetails: this.state.userDetails,
+            initialFollowState: !this.state.initialFollowState,
+            followBackgroundColor: colors.followingButtonColor,
+          });
+        } else {
+          this.state.userDetails.follower.push(this.state.users_uid);
+          this.setState({
+            userDetails: this.state.userDetails,
+            initialFollowState: !this.state.initialFollowState,
+            followBackgroundColor: colors.followButtonColor,
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+  getDataFromFirebase = async (isPull) => {
     const queryObj = {
       userId: this.state.profile_uid,
       page: this.state.page,
       limit: this.state.limit,
     };
     /* we can separate likes number and likers, we are getting likers in this call unnecessarily */
-    const url = `${SERVER}/getDuets?${queryString.stringify(queryObj)}`;
+    const url = `${SERVER}/getUserDuets?${queryString.stringify(queryObj)}`;
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
+        var tempData = [{}];
         this.setState({
-          data: this.state.data.concat(responseJson),
+          data: isPull
+            ? tempData.concat(responseJson)
+            : this.state.data.concat(responseJson),
           isLoading: false,
+          isRefreshing: false,
         });
       });
   };
@@ -253,7 +349,7 @@ class ProfileScreen extends React.PureComponent {
               style={[profilePageStyles.duetLeftHeartButton]}
               onPress={() =>
                 this.likeClick(
-                  this.state.uid,
+                  this.state.profile_uid,
                   item.clickedDuet,
                   1,
                   item.duetId,
@@ -279,7 +375,7 @@ class ProfileScreen extends React.PureComponent {
               style={[profilePageStyles.duetRightHeartButton]}
               onPress={() =>
                 this.likeClick(
-                  this.state.uid,
+                  this.state.profile_uid,
                   item.clickedDuet,
                   2,
                   item.duetId,
@@ -320,7 +416,7 @@ class ProfileScreen extends React.PureComponent {
 
   renderHeader = () => {
     return (
-      <View style={profilePageStyles.profilePageContainer}>
+      <View style={profilePageStyles.profilePageHeaderContainer}>
         <View style={profilePageStyles.userInfoSection}>
           <View style={profilePageStyles.userProfilePic}>
             <Avatar.Image
@@ -338,42 +434,60 @@ class ProfileScreen extends React.PureComponent {
               >
                 <Icon name="edit" color={colors.black} size={15} />
               </TouchableOpacity>
-            ) : (
-              {}
-            )}
-            {/* <TouchableOpacity
-          style={[profilePageStyles.editProfileIconContainer]}
-          onPress={this.switchToEditProfileScreenHandler}
-        >
-          <Icon name="edit" color={colors.black} size={15} />
-        </TouchableOpacity> */}
+            ) : null}
           </View>
           <View style={profilePageStyles.profileUserNameContainer}>
-            <Title style={profilePageStyles.title}>
-              {this.state.userDetails.firstName
-                ? this.state.userDetails.firstName + " "
-                : "Happy Dueter "}
+            <View style={profilePageStyles.NameContainer}>
+              <Title style={profilePageStyles.title}>
+                {this.state.userDetails.firstName
+                  ? this.state.userDetails.firstName + " "
+                  : "Happy Dueter "}
 
-              {this.state.userDetails.lastName
-                ? this.state.userDetails.lastName
-                : ""}
-            </Title>
-            <View style={profilePageStyles.captionContainer}>
-              <Caption style={profilePageStyles.caption}>
-                {this.state.userDetails.userId
-                  ? "@" + this.state.userDetails.userId
+                {this.state.userDetails.lastName
+                  ? this.state.userDetails.lastName
                   : ""}
-              </Caption>
+              </Title>
+              <View style={profilePageStyles.captionContainer}>
+                <Caption style={profilePageStyles.caption}>
+                  {this.state.userDetails.userId
+                    ? "@" + this.state.userDetails.userId
+                    : ""}
+                </Caption>
+              </View>
+            </View>
+            <View style={profilePageStyles.FollowContainer}>
+              {this.state.isUsersProfile ? (
+                <TouchableOpacity
+                  style={[
+                    profilePageStyles.followButtonContainer,
+                    { backgroundColor: this.state.followBackgroundColor },
+                  ]}
+                  onPress={() => this.followButtonClickHandler()}
+                >
+                  {this.state.initialFollowState ? (
+                    <Text style={profilePageStyles.followingButtonTextStyle}>
+                      {strings.following}
+                    </Text>
+                  ) : (
+                    <Text style={profilePageStyles.followButtonTextStyle}>
+                      {strings.follow}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null}
             </View>
             <View style={profilePageStyles.userBio}>
               <Text>19 yr old Fashion Blogger</Text>
-              <Text>Stream Young and Free ❤️</Text>
+              <Text>Stream Young and Free!</Text>
             </View>
           </View>
         </View>
         <View style={profilePageStyles.infoBoxWrapperContainer}>
           <View style={profilePageStyles.infoBoxWrapper}>
-            <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => this.flatListRef.scrollToIndex({ index: 0 })}
+            >
               <View style={profilePageStyles.infoBox}>
                 <Title style={profilePageStyles.infoBoxNumbers}>
                   {this.state.userDetails.duets.length}
@@ -404,6 +518,9 @@ class ProfileScreen extends React.PureComponent {
   };
 
   render() {
+    if (this.state.isUserDataLoading) {
+      return <AppLoading />;
+    }
     return (
       <SafeAreaView style={profilePageStyles.androidSafeArea}>
         <View style={profilePageStyles.profilePageContainer}>
@@ -411,23 +528,24 @@ class ProfileScreen extends React.PureComponent {
             <FlatList
               style={profilePageStyles.duetContainer}
               // ref={this.props.flatListRef}
+              ref={(ref) => {
+                this.flatListRef = ref;
+              }}
               data={this.state.data}
-              // extraData={this.state.refresh}
+              extraData={this.state.refresh}
               renderItem={this.renderDuet}
               keyExtractor={(item, index) => index.toString()}
               onEndReachedThreshold={2}
               onEndReached={this.feedMoreHandling}
               ListFooterComponent={this.renderLoadMore}
-              /* we can automate refresh icons using RefreshControl 
-            Refer - https://medium.com/enappd/refreshcontrol-pull-to-refresh-in-react-native-apps-dfe779118f75 */
-              // refreshControl={
-              //   <RefreshControl
-              //     refreshing={this.state.isRefreshing}
-              //     onRefresh={this.onPullRefresh}
-              //   />
-              // }
               ListHeaderComponent={this.renderHeader}
               stickyHeaderIndices={[1]}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.isRefreshing}
+                  onRefresh={this.onPullRefresh}
+                />
+              }
             />
           </View>
         </View>
