@@ -23,4 +23,6 @@ export default {
   editProfile: "Edit Profile",
   goString: "Go with",
   selectedUserId: "This userId has been taken.",
+  follow: "Follow",
+  following: "Following",
 };
