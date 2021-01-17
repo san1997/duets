@@ -22,7 +22,11 @@ export default {
   dividerLine: "─────────────────",
   editProfile: "Edit Profile",
   goString: "Go with",
-  selectedUserId: "This userId has been taken.",
+  selectedUserId: "This User Id has been taken.",
+  selectedUserIdProfile:
+    "User Id has already been taken. You can select a different User Id. We are almost there...",
   follow: "Follow",
   following: "Following",
+  edit_profile: "Edit Profile",
+  saveDetails: "Save Details",
 };

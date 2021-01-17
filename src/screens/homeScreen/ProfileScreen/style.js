@@ -81,7 +81,7 @@ export const profilePageStyles = StyleSheet.create({
   infoBoxWrapperContainer: {
     flex: 0.5,
     backgroundColor: "#f0f8ff",
-    paddingTop: 15,
+    paddingTop: 12,
     marginBottom: 15,
   },
   infoBox: {
@@ -100,14 +100,18 @@ export const profilePageStyles = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
   },
+  FollowContainer: {
+    marginBottom: 12,
+  },
   userBio: {
-    color: "#777777",
-    marginLeft: 20,
+    alignContent: "center",
+  },
+  bioTextStyle: {
+    color: colors.anotherGrey,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: fonts.regular_text,
     lineHeight: 26,
-    marginTop: 12,
-    alignContent: "center",
   },
   uploadContainer: {
     // marginTop: 15,
