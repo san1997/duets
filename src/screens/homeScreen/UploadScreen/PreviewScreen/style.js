@@ -3,14 +3,14 @@ import { StyleSheet, StatusBar, Platform } from "react-native";
 export const PreviewScreenStyles = StyleSheet.create({
   actionItems: {
     position: 'absolute',
-    top: '85%',
+    top: '90%',
     left: '45%',
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
   refresh: {
     position: 'absolute',
-    top: '85%',
+    top: '90%',
     left: '15%',
     alignItems: 'center',
     backgroundColor: 'transparent',

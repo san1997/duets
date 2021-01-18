@@ -86,7 +86,7 @@ class UploadScreen extends Component {
     if (this.camera) {
        console.log('Taking photo');
        const options = { quality: 1, base64: true, fixOrientation: true, exif: true};
-       await this.camera.takePictureAsync().then(photo => {
+       await this.camera.takePictureAsync({skipProcessing: true}).then(photo => {
            this.props.navigation.navigate("PreviewScreen", {data: photo, addImageToDuet: this.addImageToDuet, images: this.state.images})
            });
      }
@@ -133,9 +133,8 @@ class UploadScreen extends Component {
         style={{
           flex: 1,
           backgroundColor: 'transparent',
-          flexDirection: 'row',
         }}>
-        {this.renderFlash()}
+        {false && this.renderFlash()}
         {this.renderCameraFlip()}
         {this.renderPhotoCapture()}
         {this.renderGallery()}
@@ -143,7 +142,7 @@ class UploadScreen extends Component {
     );
   }
 
-  renderCamera() {
+renderCamera() {
     const { hasPermission } = this.state;
     if (hasPermission === null || !this.state.cameraOn) {
       return <View />;
@@ -155,6 +154,7 @@ class UploadScreen extends Component {
           <Camera style={{ flex: 1 }}
             type={this.state.type}
             ref={ (ref) => {this.camera = ref} }
+            ratio={'16:9'}
           >
             {this.renderCameraFunctions()}
           </Camera>

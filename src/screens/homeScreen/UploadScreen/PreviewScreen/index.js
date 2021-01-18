@@ -50,10 +50,11 @@ class PreviewScreen extends Component {
           flex: 1
         }}
       >
-
         <Image
           style={{flex: 1}}
+          resizeMode='contain'
           source={{uri: data.uri}}
+          backgroundColor= "#000"
         />
         {this.renderCheckButton()}
         {this.renderBackButton()}
