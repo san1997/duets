@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Image, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
@@ -29,6 +29,7 @@ class DuetPreview extends Component {
     super(props);
     this.state = {
       loading: false,
+      caption: ''
     };
   }
   uploadDuet() {
@@ -222,12 +223,14 @@ class DuetPreview extends Component {
       return <Loading />;
     }
     return (
-      <View style={{ flex: 1 }}>
-        {this.headerline()}
-        {this.addCaption()}
-        {this.showDuet()}
-        {this.renderDuetNumber()}
-      </View>
+      <SafeAreaView style={DuetPreviewStyles.androidSafeArea}>
+        <View style={{ flex: 1 }}>
+          {this.headerline()}
+          {this.addCaption()}
+          {this.showDuet()}
+          {this.renderDuetNumber()}
+        </View>
+      </SafeAreaView>
     );
   }
 }

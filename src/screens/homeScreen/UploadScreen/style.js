@@ -2,23 +2,22 @@ import { StyleSheet, StatusBar, Platform } from "react-native";
 
 export const UploadScreenStyles = StyleSheet.create({
   flash: {
-    top: "20%",
-    left: "48%",
-    alignItems: "center",
+    top: "15%",
+    left: "90%",
   },
   photoCaptureClick: {
-    top: "160%",
-    left: "17%",
-    alignItems: "center",
+    position: 'absolute',
+    top: "80%",
+    left: "45%",
   },
   cameraFlip: {
-    top: "162%",
-    left: "37%",
-    alignItems: "center",
+    position: 'absolute',
+    top: "82%",
+    left: "75%",
   },
   gallery: {
-    top: "162%",
-    left: "-5%",
-    alignItems: "center",
+    position: 'absolute',
+    top: "82%",
+    left: "20%",
   }
 });

@@ -25,7 +25,8 @@
     "android": {
       "package": "com.duetsapp.expo",
       "versionCode": 1,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "softwareKeyboardLayoutMode": "pan"
     }
   }
 }

@@ -4,9 +4,15 @@ import fonts from "../../../../constConfig/fonts";
 import colors from "../../../../constConfig/colors";
 
 export const DuetPreviewStyles = StyleSheet.create({
+  androidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+    backgroundColor: "#f0f8ff",
+  },
   topline: {
     flexDirection: 'row',
-    top: "3%"
+    top: "3%",
+    paddingBottom: "2%"
   },
   backButton: {
     flex: 2,
@@ -24,7 +30,7 @@ export const DuetPreviewStyles = StyleSheet.create({
   },
   fontShare: {
     fontSize: 20,
-    fontFamily: fonts.regular_text,
+    fontFamily: fonts.semibold_text,
   },
   shareButton: {
     flex: 2,
@@ -58,7 +64,7 @@ export const DuetPreviewStyles = StyleSheet.create({
     left: "15%",
   },
   showDuet: {
-    backgroundColor: 'pink',
+    backgroundColor: colors.profileLightBlue,
     flex: 3,
     flexDirection: "row",
     alignItems: "center"
