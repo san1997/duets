@@ -52,7 +52,11 @@ class ProfileScreen extends React.PureComponent {
   }
 
   switchToEditProfileScreenHandler = () => {
-    this.props.navigation.navigate("EditProfileScreen");
+    this.props.navigation.navigate("EditProfileScreen", {
+      userDetails: this.state.userDetails,
+      profile_uid: this.state.profile_uid,
+      updateUserDetails: this.updateUserDetails,
+    });
   };
 
   switchToFullImagePage(imgData, startFromBack) {
@@ -78,6 +82,26 @@ class ProfileScreen extends React.PureComponent {
     this.setState({ isRefreshing: true, page: 1 }, () => {
       this.getDataFromFirebase(true);
     });
+  };
+
+  updateUserDetails = (profile_uid, props, CommonActions) => {
+    this.setState({ isUserDataLoading: true });
+    const queryObj = {
+      userId: profile_uid,
+    };
+    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ userDetails: json });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState(
+          { isUserDataLoading: false },
+          props.navigation.dispatch(CommonActions.goBack())
+        );
+      });
   };
 
   fetchUserDetails() {
@@ -477,8 +501,11 @@ class ProfileScreen extends React.PureComponent {
               ) : null}
             </View>
             <View style={profilePageStyles.userBio}>
-              <Text>19 yr old Fashion Blogger</Text>
-              <Text>Stream Young and Free!</Text>
+              {this.state.userDetails.bio ? (
+                <Text style={profilePageStyles.bioTextStyle}>
+                  {this.state.userDetails.bio}
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>

@@ -16,4 +16,6 @@ export default {
   anotherGrey: "#616161",
   followButtonColor: "#FFCEA3",
   followingButtonColor: "#A3D4FF",
+  profileLightBlue: "#f0f8ff",
+  editProfileIconColor: "#c9d0d6",
 };

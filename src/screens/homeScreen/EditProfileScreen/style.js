@@ -13,8 +13,9 @@ export const EditProfilePageStyles = styled.View`
 export const editProfilePageStyles = StyleSheet.create({
   androidSafeArea: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 20 : 0,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
     alignItems: "center",
+    backgroundColor: colors.profileLightBlue,
   },
   container: {
     flex: 1,
@@ -22,34 +23,49 @@ export const editProfilePageStyles = StyleSheet.create({
   button: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.profileLightBlue,
     alignItems: "center",
-    marginTop: 10,
-    width: 200,
+    marginTop: 30,
+    width: 150,
   },
   buttonContainer: {
     alignItems: "center",
   },
   editImageContainer: {
-    marginVertical: 30,
+    marginVertical: 15,
     alignItems: "center",
+  },
+  editTextPlusProfileContainer: {
+    backgroundColor: colors.profileLightBlue,
   },
   editContainer: {
-    flex: 1,
-    margin: 20,
     alignItems: "center",
+    backgroundColor: colors.profileLightBlue,
+    paddingBottom: 20,
+  },
+  editProfileTextContainer: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: colors.white,
+    paddingTop: 20,
+  },
+  atTextStyle: {
+    fontSize: 20,
+    marginTop: -5,
+    fontFamily: fonts.semibold_text,
   },
   panelButton: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "black",
+    fontSize: 17,
+    fontFamily: fonts.regular_text,
+    color: colors.anotherGrey,
   },
   action: {
     flexDirection: "row",
-    marginVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    marginVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.borderLightColor,
     paddingVertical: 5,
+    paddingLeft: 10,
   },
   saveAndLogoutButtonContainer: {
     flex: 1,
@@ -59,7 +75,20 @@ export const editProfilePageStyles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+    fontFamily: fonts.regular_text,
+    fontSize: 15,
     marginTop: Platform.OS === "ios" ? 0 : -5,
-    paddingLeft: 10,
+    paddingLeft: 12,
+  },
+  editTextContainer: {
+    width: "100%",
+    padding: 10,
+    backgroundColor: colors.profileLightBlue,
+    alignItems: "center",
+  },
+  editTextStyle: {
+    fontSize: 17,
+    fontFamily: fonts.regular_text,
+    color: colors.anotherGrey,
   },
 });
