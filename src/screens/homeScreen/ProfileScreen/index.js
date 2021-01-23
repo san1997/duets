@@ -104,8 +104,8 @@ class ProfileScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    this._isMounted = false;
     if(this.props.route.params.navigationFromFeed){
       this.props.route.params.swiperStateChange(true);
     }
