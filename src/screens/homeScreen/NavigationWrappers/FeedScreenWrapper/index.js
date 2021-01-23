@@ -36,11 +36,11 @@ const Tab = createBottomTabNavigator();
 
 /* need to render this from seperate component */
 function FeedStackScreen({ navigation, route }) {
-  // if (route.state && route.state.index > 0) {
-  //   navigation.setOptions({ tabBarVisible: false });
-  // } else {
-  //   navigation.setOptions({ tabBarVisible: true });
-  // }
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
   const { swiperStateChange, userDetails, uid } = route.params;
   return (
     <FeedStack.Navigator

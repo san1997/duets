@@ -9,6 +9,8 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  BackHandler,
+  Alert
 } from "react-native";
 import { AppLoading } from "expo";
 import { useScrollToTop } from "@react-navigation/native";
@@ -34,6 +36,7 @@ class ProfileScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.myRef = React.createRef();
     this.state = {
       userDetails: null,
       profile_uid: this.props.route.params.profile_uid,
@@ -41,14 +44,36 @@ class ProfileScreen extends React.Component {
       isUsersProfile: this.props.route.params.isUsersProfile,
       data: [{}],
       page: 1,
-      limit: 3,
+      limit: 4,
       refresh: !refresh,
       isRefreshing: false,
       isLoading: true,
       isUserDataLoading: true,
       initialFollowState: false,
       followBackgroundColor: null,
+      currentPos: 0
     };
+  }
+
+  backAction = () => {
+    // Alert.alert("Hold on!", "Are you sure you want to go back?", [
+    //   {
+    //     text: "Cancel",
+    //     onPress: () => null,
+    //     style: "cancel"
+    //   },
+    //   { text: "YES", onPress: () => BackHandler.exitApp() }
+    // ]);
+    if(this.state.currentPos === 0) {
+      return;
+    }
+    this.myRef.current.scrollToOffset({x: 0, y: 0, animated: true})
+    this.setState({currentPos: 0});
+    return true;
+  };
+
+  _handleScroll = (event) =>{
+    this.setState({currentPos: event.nativeEvent.contentOffset.y})
   }
 
   switchToEditProfileScreenHandler = () => {
@@ -68,6 +93,7 @@ class ProfileScreen extends React.Component {
 
   componentDidMount() {
     // this.setState(this.setUploadAsFirstData);
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
     if(this.props.route.params.navigationFromFeed){
       this.props.route.params.swiperStateChange(false);
     }
@@ -79,6 +105,7 @@ class ProfileScreen extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     if(this.props.route.params.navigationFromFeed){
       this.props.route.params.swiperStateChange(true);
     }
@@ -273,7 +300,7 @@ class ProfileScreen extends React.Component {
           onPress={() => console.log("userName Pressed")}
           style={profilePageStyles.userNameCommentStyle}
         >
-          {item.userName}
+          {this.state.userDetails.userId}
         </Text>{" "}
         {item.caption}
       </Text>
@@ -351,7 +378,7 @@ class ProfileScreen extends React.Component {
           <View style={profilePageStyles.userNameContainer}>
             <TouchableOpacity>
               <Text style={profilePageStyles.userNameStyle}>
-                {item.userName}
+                {this.state.userDetails.userId}
               </Text>
             </TouchableOpacity>
             <Text style={profilePageStyles.duetUploadTimeStyle}>10h</Text>
@@ -603,10 +630,11 @@ class ProfileScreen extends React.Component {
           <View style={profilePageStyles.duetsContainer}>
             <FlatList
               style={profilePageStyles.duetContainer}
-              // ref={this.props.flatListRef}
-              ref={(ref) => {
-                this.flatListRef = ref;
-              }}
+              onScroll={this._handleScroll}   
+              ref={this.myRef}
+              // ref={(ref) => {
+              //   this.flatListRef = ref;
+              // }}
               data={this.state.data}
               extraData={this.state.refresh}
               renderItem={this.renderDuet}
