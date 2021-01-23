@@ -41,7 +41,7 @@ function FeedStackScreen({ navigation, route }) {
   // } else {
   //   navigation.setOptions({ tabBarVisible: true });
   // }
-  const { userDetails, uid } = route.params;
+  const { swiperStateChange, userDetails, uid } = route.params;
   return (
     <FeedStack.Navigator
       initialRouteName="FeedScreen"
@@ -93,12 +93,20 @@ function FeedStackScreen({ navigation, route }) {
           // title: "Full Image",
         }}
       />
+      <FeedStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        initialParams={{ swiperStateChange: swiperStateChange }}
+        options={{
+          headerShown: false,
+        }}
+      />
     </FeedStack.Navigator>
   );
 }
 
 function FeedTabNavigatorScreen({ route }) {
-  const { userDetails, uid } = route.params;
+  const { swiperStateChange, userDetails, uid } = route.params;
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -122,7 +130,7 @@ function FeedTabNavigatorScreen({ route }) {
       <Tab.Screen
         name="Feed"
         component={FeedStackScreen}
-        initialParams={{ userDetails: userDetails, uid: uid }}
+        initialParams={{ swiperStateChange: swiperStateChange, userDetails: userDetails, uid: uid}}
         options={{
           tabBarIcon: ({ color }) => (
             <EntypoIcon name="home" color={color} size={32} />
@@ -205,6 +213,7 @@ class FeedScreenWrapper extends React.Component {
             name="FeedScreen"
             component={FeedTabNavigatorScreen}
             initialParams={{
+              swiperStateChange: this.props.swiperStateChange,
               userDetails: this.state.userDetails,
               uid: this.props.uid,
             }}

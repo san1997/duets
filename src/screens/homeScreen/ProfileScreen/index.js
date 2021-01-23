@@ -29,7 +29,7 @@ import { profilePageStyles } from "./style.js";
 
 const refresh = 1;
 
-class ProfileScreen extends React.PureComponent {
+class ProfileScreen extends React.Component {
   _isMounted = false;
 
   constructor(props) {
@@ -68,6 +68,9 @@ class ProfileScreen extends React.PureComponent {
 
   componentDidMount() {
     // this.setState(this.setUploadAsFirstData);
+    if(this.props.route.params.navigationFromFeed){
+      this.props.route.params.swiperStateChange(false);
+    }
     this._isMounted = true;
     this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
     this.getInitialFollowState();
@@ -76,11 +79,38 @@ class ProfileScreen extends React.PureComponent {
 
   componentWillUnmount() {
     this._isMounted = false;
+    if(this.props.route.params.navigationFromFeed){
+      this.props.route.params.swiperStateChange(true);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.route.params.navigationFromFeed){
+      this.props.route.params.swiperStateChange(false);
+    }
+    if((prevState.profile_uid !== this.props.route.params.profile_uid) || (prevState.users_uid !== this.props.route.params.users_uid) || (prevState.isUsersProfile !== this.props.route.params.isUsersProfile)){
+      this.setState({profile_uid: this.props.route.params.profile_uid,
+        users_uid: this.props.route.params.users_uid,
+        isUsersProfile: this.props.route.params.isUsersProfile,
+        data: [{}],
+        page: 1,
+        limit: 3,
+        refresh: !refresh,
+        isRefreshing: false,
+        isLoading: true,
+        isUserDataLoading: true,
+        initialFollowState: false,
+        followBackgroundColor: null});
+      this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
+      this.getInitialFollowState();
+      this.setState({ isLoading: true }, this.getDataFromFirebase);
+    } 
   }
 
   onPullRefresh = () => {
     this.setState({ isRefreshing: true, page: 1 }, () => {
       this.getDataFromFirebase(true);
+      this.getLatestDuets();
     });
   };
 
@@ -103,6 +133,25 @@ class ProfileScreen extends React.PureComponent {
         );
       });
   };
+
+  getLatestDuets = () => {
+    const queryObj = {
+      userId: this.state.profile_uid,
+    };
+    const url = `${SERVER}/getUpdatedDuets?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((res) => {
+        this.state.userDetails.duets = res;
+        this.setState({ userDetails: this.state.userDetails });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState(
+          { isUserDataLoading: false }
+        );
+      });
+  }
 
   fetchUserDetails() {
     const queryObj = {
@@ -451,7 +500,7 @@ class ProfileScreen extends React.PureComponent {
               }}
               size={Dimensions.get("window").height / 9}
             />
-            {this.state.isUsersProfile ? (
+            {(this.state.isUsersProfile && !this.props.route.params.navigationFromFeed) ? (
               <TouchableOpacity
                 style={[profilePageStyles.editProfileIconContainer]}
                 onPress={this.switchToEditProfileScreenHandler}
@@ -480,7 +529,7 @@ class ProfileScreen extends React.PureComponent {
               </View>
             </View>
             <View style={profilePageStyles.FollowContainer}>
-              {this.state.isUsersProfile ? (
+              {!this.state.isUsersProfile ? (
                 <TouchableOpacity
                   style={[
                     profilePageStyles.followButtonContainer,
