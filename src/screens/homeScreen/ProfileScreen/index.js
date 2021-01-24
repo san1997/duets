@@ -381,7 +381,7 @@ class ProfileScreen extends React.Component {
                 {this.state.userDetails.userId}
               </Text>
             </TouchableOpacity>
-            <Text style={profilePageStyles.duetUploadTimeStyle}>10h</Text>
+            <Text style={profilePageStyles.duetUploadTimeStyle}>{item.uploadTime}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[profilePageStyles.singleDuetOptionIcon]}>

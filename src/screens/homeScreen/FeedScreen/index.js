@@ -193,7 +193,7 @@ class FeedScreen extends React.PureComponent {
             <TouchableOpacity onPress={() => this.switchToProfileFeedStacks(this.state.uid, item.userId)}>
               <Text style={feedPageStyles.userNameStyle}>{item.userName}</Text>
             </TouchableOpacity>
-            <Text style={feedPageStyles.duetUploadTimeStyle}>10h</Text>
+            <Text style={feedPageStyles.duetUploadTimeStyle}>{item.uploadTime}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[feedPageStyles.singleDuetOptionIcon]}>

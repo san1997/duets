@@ -165,7 +165,7 @@ export const profilePageStyles = StyleSheet.create({
   },
   duetUploadTimeStyle: {
     fontFamily: fonts.regular_text,
-    color: colors.blackTimeColor,
+    color: colors.blackForTimer,
     fontSize: 13.5,
     marginLeft: 5,
   },
