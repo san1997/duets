@@ -31,6 +31,7 @@ import queryString from "query-string";
 import { SERVER } from "../../../../constConfig/config";
 
 const FeedStack = createStackNavigator();
+const SearchStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -105,8 +106,51 @@ function FeedStackScreen({ navigation, route }) {
   );
 }
 
-function FeedTabNavigatorScreen({ route }) {
+function SearchStackScreen({ navigation, route }) {
   const { swiperStateChange, userDetails, uid } = route.params;
+  return (
+    <SearchStack.Navigator
+      initialRouteName="SearchScreen"
+    >
+      <SearchStack.Screen
+        name="SearchScreen"
+        component={SearchScreen}
+        initialParams={{ uid: uid }}
+        options={{
+          headerShown: false,
+          // headerStyle: { backgroundColor: "black" },
+          // title: "Full Image",
+        }}
+      />
+      <SearchStack.Screen
+        name="FullDuetScreen"
+        component={FullDuetScreen}
+        options={{
+          headerShown: false,
+          // headerStyle: { backgroundColor: "black" },
+          // title: "Full Image",
+        }}
+      />
+      <SearchStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        initialParams={{ swiperStateChange: swiperStateChange }}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </SearchStack.Navigator>
+  );
+}
+
+function FeedTabNavigatorScreen({ route }) {
+  
+  const { swiperStateChange, userDetails, uid } = route.params;
+
+  if(route.state && route.state.index === 1){
+    swiperStateChange(true);
+  }
+
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -149,7 +193,8 @@ function FeedTabNavigatorScreen({ route }) {
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStackScreen}
+        initialParams={{ swiperStateChange: swiperStateChange, uid: uid}}
         options={{
           // tabBarVisible: false,
           tabBarIcon: ({ color }) => (

@@ -25,6 +25,7 @@ class SearchScreen extends React.Component {
     this.state = {
       loading: false,
       data: [],
+      uid: this.props.route.params.uid,
     };
   }
 
@@ -41,6 +42,15 @@ class SearchScreen extends React.Component {
       />
     );
   };
+
+  switchToProfileFeedStacks(user_uid, profile_uid) {
+    this.props.navigation.navigate("ProfileScreen", {
+      navigationFromFeed: true,
+      profile_uid: profile_uid ? profile_uid: user_uid, // change it to only profile_uid after once each duet has user_id
+      users_uid: user_uid,
+      isUsersProfile: (profile_uid == user_uid)
+    });
+  }
 
   searchFilterFunction = (text) => {
     this.setState({
@@ -113,7 +123,9 @@ class SearchScreen extends React.Component {
     //   );
     // }
     return (
-      <TouchableOpacity style={{ flex: 1 }}>
+      <TouchableOpacity style={{ flex: 1 }}
+        onPress={() => this.switchToProfileFeedStacks(this.state.uid, item.uid)}
+      >
         <View style={searchScreenStyles.flex_row}>
           <View style={searchScreenStyles.userThumbnailContainer}>
             <Image
