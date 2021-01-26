@@ -15,8 +15,9 @@ export const drawerContentStyles = StyleSheet.create({
   },
 
   profileContainer: {
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
+    marginTop: -20,
   },
   userNameStyle: {
     fontFamily: fonts.semibold_text,
@@ -29,7 +30,7 @@ export const drawerContentStyles = StyleSheet.create({
     marginTop: 5,
   },
   drawerSectionStyle: {
-    marginTop: 15,
+    marginTop: -10,
   },
   drawerTextStyle: {
     fontFamily: fonts.regular_text,

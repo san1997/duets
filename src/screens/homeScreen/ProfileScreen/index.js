@@ -360,7 +360,7 @@ class ProfileScreen extends React.Component {
     const url = `${SERVER}/duets-delete`;
     const data = {
       id: item.duetId,
-      uid: item.userId
+      uid: item.userId,
     };
     const options = {
       method: "DELETE",
@@ -378,16 +378,17 @@ class ProfileScreen extends React.Component {
   }
 
   onPopupEvent = (eventName, index, item, duetInd) => {
-    if (eventName !== 'itemSelected') return
-    if (index === 0) { // Removing duet
+    if (eventName !== "itemSelected") return;
+    if (index === 0) {
+      // Removing duet
       const duetList = this.state.data;
-      console.log('duets earlier', duetList);
+      console.log("duets earlier", duetList);
       duetList.splice(duetInd, 1);
-      console.log('after delete', duetList);
-      this.setState({data: duetList});
+      console.log("after delete", duetList);
+      this.setState({ data: duetList });
       this.removeDuet(item);
     }
-  }
+  };
 
   renderDuet = ({ item, index }) => {
     return index == 0 ? (
@@ -413,7 +414,7 @@ class ProfileScreen extends React.Component {
                 source={{
                   uri: item.profilePicture
                     ? item.profilePicture
-                    : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                    : "https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-logo-02.png?alt=media&token=854cdad3-3578-4494-9758-c554ca386e7f",
                 }}
                 style={profilePageStyles.userThumbnail}
               />
@@ -431,7 +432,10 @@ class ProfileScreen extends React.Component {
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
-            <PopupMenu actions={['Remove']} onPress={(a, b) => this.onPopupEvent(a, b, item, index)}/>
+            <PopupMenu
+              actions={["Remove"]}
+              onPress={(a, b) => this.onPopupEvent(a, b, item, index)}
+            />
           </View>
         </View>
         <View
@@ -568,7 +572,7 @@ class ProfileScreen extends React.Component {
               source={{
                 uri: this.state.userDetails.profilePicture
                   ? this.state.userDetails.profilePicture
-                  : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                  : "https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-logo-02.png?alt=media&token=854cdad3-3578-4494-9758-c554ca386e7f",
               }}
               size={Dimensions.get("window").height / 9}
             />

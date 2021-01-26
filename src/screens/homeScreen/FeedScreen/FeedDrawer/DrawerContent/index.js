@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import { View, StyleSheet, SafeAreaView, Image } from "react-native";
 import { useTheme, Avatar, Drawer, Text } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/EvilIcons";
@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Strings from "../../../../../constConfig/strings";
 import colors from "../../../../../constConfig/colors";
+import images from "../../../../../constConfig/images";
 
 import { drawerContentStyles } from "./style.js";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -17,21 +18,23 @@ export function DrawerContent(props) {
       <DrawerContentScrollView {...props}>
         <View style={drawerContentStyles.drawerContainer}>
           <View style={drawerContentStyles.profileContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate("ProfileScreen");
-              }}
-            >
-              <Avatar.Image
+            <TouchableOpacity>
+              <Image
+                style={{
+                  resizeMode: "contain",
+                  width: 60,
+                }}
+                source={images.logotext}
+              />
+              {/* <Avatar.Image
                 source={{
-                  uri: props.userDetails.profilePicture
-                    ? props.userDetails.profilePicture
-                    : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                  uri:
+                    "https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-text-02.png?alt=media&token=b803626c-396b-4326-b0a1-db35dd7aebd6",
                 }}
                 size={70}
-              />
+              /> */}
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 props.navigation.navigate("ProfileScreen");
               }}
@@ -48,7 +51,7 @@ export function DrawerContent(props) {
               <Text style={drawerContentStyles.editProfileLinkStyle}>
                 {Strings.editProfile}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <Drawer.Section style={drawerContentStyles.drawerSectionStyle}>
