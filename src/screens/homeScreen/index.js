@@ -14,6 +14,7 @@ class HomeScreen extends React.Component {
       swiper: true,
       currentIndex: 1,
     };
+    this.swiperStateChange = this.swiperStateChange.bind(this);
   }
 
   handleIndex(ind) {
@@ -25,15 +26,15 @@ class HomeScreen extends React.Component {
   }
 
   swiperStateChange = (val) => {
-    this.setState({swiper: val})
-  }
+    this.setState({ swiper: val });
+  };
 
   render() {
     return (
       <Swiper
         loop={false}
         showsPagination={false}
-        scrollEnabled={ this.state.swiper }
+        scrollEnabled={this.state.swiper}
         index={this.state.currentIndex}
         onIndexChanged={(ind) => this.handleIndex(ind)}
       >
@@ -41,7 +42,10 @@ class HomeScreen extends React.Component {
           uid={this.props.uid}
           cameraOn={this.state.cameraOn}
         />
-        <FeedScreenWrapper uid={this.props.uid} swiperStateChange={this.swiperStateChange}/>
+        <FeedScreenWrapper
+          uid={this.props.uid}
+          swiperStateChange={this.swiperStateChange}
+        />
         <ProfileScreenWrapper
           users_uid={this.props.uid}
           profile_uid={this.props.uid}

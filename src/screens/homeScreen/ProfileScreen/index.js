@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   BackHandler,
-  Alert
+  Alert,
 } from "react-native";
 import { AppLoading } from "expo";
 import { useScrollToTop } from "@react-navigation/native";
@@ -51,8 +51,10 @@ class ProfileScreen extends React.Component {
       isUserDataLoading: true,
       initialFollowState: false,
       followBackgroundColor: null,
-      currentPos: 0
+      currentPos: 0,
     };
+
+    this.updateUserDetails = this.updateUserDetails.bind(this);
   }
 
   backAction = () => {
@@ -64,17 +66,17 @@ class ProfileScreen extends React.Component {
     //   },
     //   { text: "YES", onPress: () => BackHandler.exitApp() }
     // ]);
-    if(this.state.currentPos === 0) {
+    if (this.state.currentPos === 0) {
       return;
     }
-    this.myRef.current.scrollToOffset({x: 0, y: 0, animated: true})
-    this.setState({currentPos: 0});
+    this.myRef.current.scrollToOffset({ x: 0, y: 0, animated: true });
+    this.setState({ currentPos: 0 });
     return true;
   };
 
-  _handleScroll = (event) =>{
-    this.setState({currentPos: event.nativeEvent.contentOffset.y})
-  }
+  _handleScroll = (event) => {
+    this.setState({ currentPos: event.nativeEvent.contentOffset.y });
+  };
 
   switchToEditProfileScreenHandler = () => {
     this.props.navigation.navigate("EditProfileScreen", {
@@ -94,7 +96,7 @@ class ProfileScreen extends React.Component {
   componentDidMount() {
     // this.setState(this.setUploadAsFirstData);
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
-    if(this.props.route.params.navigationFromFeed){
+    if (this.props.route.params.navigationFromFeed) {
       this.props.route.params.swiperStateChange(false);
     }
     this._isMounted = true;
@@ -106,17 +108,22 @@ class ProfileScreen extends React.Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     this._isMounted = false;
-    if(this.props.route.params.navigationFromFeed){
+    if (this.props.route.params.navigationFromFeed) {
       this.props.route.params.swiperStateChange(true);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.route.params.navigationFromFeed){
+    if (this.props.route.params.navigationFromFeed) {
       this.props.route.params.swiperStateChange(false);
     }
-    if((prevState.profile_uid !== this.props.route.params.profile_uid) || (prevState.users_uid !== this.props.route.params.users_uid) || (prevState.isUsersProfile !== this.props.route.params.isUsersProfile)){
-      this.setState({profile_uid: this.props.route.params.profile_uid,
+    if (
+      prevState.profile_uid !== this.props.route.params.profile_uid ||
+      prevState.users_uid !== this.props.route.params.users_uid ||
+      prevState.isUsersProfile !== this.props.route.params.isUsersProfile
+    ) {
+      this.setState({
+        profile_uid: this.props.route.params.profile_uid,
         users_uid: this.props.route.params.users_uid,
         isUsersProfile: this.props.route.params.isUsersProfile,
         data: [{}],
@@ -127,11 +134,13 @@ class ProfileScreen extends React.Component {
         isLoading: true,
         isUserDataLoading: true,
         initialFollowState: false,
-        followBackgroundColor: null});
+        followBackgroundColor: null,
+        noMoreLoad: false,
+      });
       this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
       this.getInitialFollowState();
       this.setState({ isLoading: true }, this.getDataFromFirebase);
-    } 
+    }
   }
 
   onPullRefresh = () => {
@@ -174,11 +183,9 @@ class ProfileScreen extends React.Component {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        this.setState(
-          { isUserDataLoading: false }
-        );
+        this.setState({ isUserDataLoading: false });
       });
-  }
+  };
 
   fetchUserDetails() {
     const queryObj = {
@@ -273,11 +280,15 @@ class ProfileScreen extends React.Component {
             : this.state.data.concat(responseJson),
           isLoading: false,
           isRefreshing: false,
+          noMoreLoad: responseJson.length < this.state.limit ? true : false,
         });
       });
   };
 
   feedMoreHandling = () => {
+    if (this.state.noMoreLoad) {
+      return null;
+    }
     // this.setState({ page: this.state.page + 1, isLoading: true }, this.getData);
     this.setState(
       { page: this.state.page + 1, isLoading: true },
@@ -381,7 +392,9 @@ class ProfileScreen extends React.Component {
                 {this.state.userDetails.userId}
               </Text>
             </TouchableOpacity>
-            <Text style={profilePageStyles.duetUploadTimeStyle}>{item.uploadTime}</Text>
+            <Text style={profilePageStyles.duetUploadTimeStyle}>
+              {item.uploadTime}
+            </Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[profilePageStyles.singleDuetOptionIcon]}>
@@ -527,7 +540,8 @@ class ProfileScreen extends React.Component {
               }}
               size={Dimensions.get("window").height / 9}
             />
-            {(this.state.isUsersProfile && !this.props.route.params.navigationFromFeed) ? (
+            {this.state.isUsersProfile &&
+            !this.props.route.params.navigationFromFeed ? (
               <TouchableOpacity
                 style={[profilePageStyles.editProfileIconContainer]}
                 onPress={this.switchToEditProfileScreenHandler}
@@ -630,7 +644,7 @@ class ProfileScreen extends React.Component {
           <View style={profilePageStyles.duetsContainer}>
             <FlatList
               style={profilePageStyles.duetContainer}
-              onScroll={this._handleScroll}   
+              onScroll={this._handleScroll}
               ref={this.myRef}
               // ref={(ref) => {
               //   this.flatListRef = ref;

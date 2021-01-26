@@ -83,11 +83,11 @@ class ProfileScreenWrapper extends React.Component {
             name="FullDuetScreen"
             component={FullDuetScreen}
             options={{
-            headerShown: false,
-          // headerStyle: { backgroundColor: "black" },
-          // title: "Full Image",
-        }}
-      />
+              headerShown: false,
+              // headerStyle: { backgroundColor: "black" },
+              // title: "Full Image",
+            }}
+          />
         </ProfileStack.Navigator>
       </NavigationContainer>
     );
