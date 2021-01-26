@@ -11,7 +11,10 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       cameraOn: false,
+      swiper: true,
+      currentIndex: 1,
     };
+    this.swiperStateChange = this.swiperStateChange.bind(this);
   }
 
   handleIndex(ind) {
@@ -21,19 +24,28 @@ class HomeScreen extends React.Component {
       this.setState({ cameraOn: false });
     }
   }
+
+  swiperStateChange = (val) => {
+    this.setState({ swiper: val });
+  };
+
   render() {
     return (
       <Swiper
         loop={false}
         showsPagination={false}
-        index={1}
+        scrollEnabled={this.state.swiper}
+        index={this.state.currentIndex}
         onIndexChanged={(ind) => this.handleIndex(ind)}
       >
         <UploadScreenWrapper
           uid={this.props.uid}
           cameraOn={this.state.cameraOn}
         />
-        <FeedScreenWrapper uid={this.props.uid} />
+        <FeedScreenWrapper
+          uid={this.props.uid}
+          swiperStateChange={this.swiperStateChange}
+        />
         <ProfileScreenWrapper
           users_uid={this.props.uid}
           profile_uid={this.props.uid}

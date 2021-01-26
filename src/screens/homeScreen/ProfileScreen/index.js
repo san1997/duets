@@ -9,6 +9,8 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  BackHandler,
+  Alert,
 } from "react-native";
 import { AppLoading } from "expo";
 import { useScrollToTop } from "@react-navigation/native";
@@ -29,11 +31,12 @@ import { profilePageStyles } from "./style.js";
 
 const refresh = 1;
 
-class ProfileScreen extends React.PureComponent {
+class ProfileScreen extends React.Component {
   _isMounted = false;
 
   constructor(props) {
     super(props);
+    this.myRef = React.createRef();
     this.state = {
       userDetails: null,
       profile_uid: this.props.route.params.profile_uid,
@@ -41,15 +44,39 @@ class ProfileScreen extends React.PureComponent {
       isUsersProfile: this.props.route.params.isUsersProfile,
       data: [{}],
       page: 1,
-      limit: 3,
+      limit: 4,
       refresh: !refresh,
       isRefreshing: false,
       isLoading: true,
       isUserDataLoading: true,
       initialFollowState: false,
       followBackgroundColor: null,
+      currentPos: 0,
     };
+
+    this.updateUserDetails = this.updateUserDetails.bind(this);
   }
+
+  backAction = () => {
+    // Alert.alert("Hold on!", "Are you sure you want to go back?", [
+    //   {
+    //     text: "Cancel",
+    //     onPress: () => null,
+    //     style: "cancel"
+    //   },
+    //   { text: "YES", onPress: () => BackHandler.exitApp() }
+    // ]);
+    if (this.state.currentPos === 0) {
+      return;
+    }
+    this.myRef.current.scrollToOffset({ x: 0, y: 0, animated: true });
+    this.setState({ currentPos: 0 });
+    return true;
+  };
+
+  _handleScroll = (event) => {
+    this.setState({ currentPos: event.nativeEvent.contentOffset.y });
+  };
 
   switchToEditProfileScreenHandler = () => {
     this.props.navigation.navigate("EditProfileScreen", {
@@ -68,6 +95,10 @@ class ProfileScreen extends React.PureComponent {
 
   componentDidMount() {
     // this.setState(this.setUploadAsFirstData);
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    if (this.props.route.params.navigationFromFeed) {
+      this.props.route.params.swiperStateChange(false);
+    }
     this._isMounted = true;
     this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
     this.getInitialFollowState();
@@ -75,12 +106,47 @@ class ProfileScreen extends React.PureComponent {
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     this._isMounted = false;
+    if (this.props.route.params.navigationFromFeed) {
+      this.props.route.params.swiperStateChange(true);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.route.params.navigationFromFeed) {
+      this.props.route.params.swiperStateChange(false);
+    }
+    if (
+      prevState.profile_uid !== this.props.route.params.profile_uid ||
+      prevState.users_uid !== this.props.route.params.users_uid ||
+      prevState.isUsersProfile !== this.props.route.params.isUsersProfile
+    ) {
+      this.setState({
+        profile_uid: this.props.route.params.profile_uid,
+        users_uid: this.props.route.params.users_uid,
+        isUsersProfile: this.props.route.params.isUsersProfile,
+        data: [{}],
+        page: 1,
+        limit: 3,
+        refresh: !refresh,
+        isRefreshing: false,
+        isLoading: true,
+        isUserDataLoading: true,
+        initialFollowState: false,
+        followBackgroundColor: null,
+        noMoreLoad: false,
+      });
+      this.setState({ isUserDataLoading: true }, this.fetchUserDetails);
+      this.getInitialFollowState();
+      this.setState({ isLoading: true }, this.getDataFromFirebase);
+    }
   }
 
   onPullRefresh = () => {
     this.setState({ isRefreshing: true, page: 1 }, () => {
       this.getDataFromFirebase(true);
+      this.getLatestDuets();
     });
   };
 
@@ -101,6 +167,23 @@ class ProfileScreen extends React.PureComponent {
           { isUserDataLoading: false },
           props.navigation.dispatch(CommonActions.goBack())
         );
+      });
+  };
+
+  getLatestDuets = () => {
+    const queryObj = {
+      userId: this.state.profile_uid,
+    };
+    const url = `${SERVER}/getUpdatedDuets?${queryString.stringify(queryObj)}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((res) => {
+        this.state.userDetails.duets = res;
+        this.setState({ userDetails: this.state.userDetails });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isUserDataLoading: false });
       });
   };
 
@@ -197,11 +280,15 @@ class ProfileScreen extends React.PureComponent {
             : this.state.data.concat(responseJson),
           isLoading: false,
           isRefreshing: false,
+          noMoreLoad: responseJson.length < this.state.limit ? true : false,
         });
       });
   };
 
   feedMoreHandling = () => {
+    if (this.state.noMoreLoad) {
+      return null;
+    }
     // this.setState({ page: this.state.page + 1, isLoading: true }, this.getData);
     this.setState(
       { page: this.state.page + 1, isLoading: true },
@@ -224,7 +311,7 @@ class ProfileScreen extends React.PureComponent {
           onPress={() => console.log("userName Pressed")}
           style={profilePageStyles.userNameCommentStyle}
         >
-          {item.userName}
+          {this.state.userDetails.userId}
         </Text>{" "}
         {item.caption}
       </Text>
@@ -302,10 +389,12 @@ class ProfileScreen extends React.PureComponent {
           <View style={profilePageStyles.userNameContainer}>
             <TouchableOpacity>
               <Text style={profilePageStyles.userNameStyle}>
-                {item.userName}
+                {this.state.userDetails.userId}
               </Text>
             </TouchableOpacity>
-            <Text style={profilePageStyles.duetUploadTimeStyle}>10h</Text>
+            <Text style={profilePageStyles.duetUploadTimeStyle}>
+              {item.uploadTime}
+            </Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[profilePageStyles.singleDuetOptionIcon]}>
@@ -451,7 +540,8 @@ class ProfileScreen extends React.PureComponent {
               }}
               size={Dimensions.get("window").height / 9}
             />
-            {this.state.isUsersProfile ? (
+            {this.state.isUsersProfile &&
+            !this.props.route.params.navigationFromFeed ? (
               <TouchableOpacity
                 style={[profilePageStyles.editProfileIconContainer]}
                 onPress={this.switchToEditProfileScreenHandler}
@@ -480,7 +570,7 @@ class ProfileScreen extends React.PureComponent {
               </View>
             </View>
             <View style={profilePageStyles.FollowContainer}>
-              {this.state.isUsersProfile ? (
+              {!this.state.isUsersProfile ? (
                 <TouchableOpacity
                   style={[
                     profilePageStyles.followButtonContainer,
@@ -554,10 +644,11 @@ class ProfileScreen extends React.PureComponent {
           <View style={profilePageStyles.duetsContainer}>
             <FlatList
               style={profilePageStyles.duetContainer}
-              // ref={this.props.flatListRef}
-              ref={(ref) => {
-                this.flatListRef = ref;
-              }}
+              onScroll={this._handleScroll}
+              ref={this.myRef}
+              // ref={(ref) => {
+              //   this.flatListRef = ref;
+              // }}
               data={this.state.data}
               extraData={this.state.refresh}
               renderItem={this.renderDuet}

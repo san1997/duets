@@ -26,22 +26,26 @@ import EditProfileScreen from "../../EditProfileScreen";
 
 /* tab screens import */
 import SearchScreen from "../../TabScreens/SearchScreen";
+import NotificationScreen from "../../TabScreens/NotificationScreen";
 
 import queryString from "query-string";
 import { SERVER } from "../../../../constConfig/config";
+import fonts from "../../../../constConfig/fonts.js";
 
 const FeedStack = createStackNavigator();
+const SearchStack = createStackNavigator();
+const NotificationStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 /* need to render this from seperate component */
 function FeedStackScreen({ navigation, route }) {
-  // if (route.state && route.state.index > 0) {
-  //   navigation.setOptions({ tabBarVisible: false });
-  // } else {
-  //   navigation.setOptions({ tabBarVisible: true });
-  // }
-  const { userDetails, uid } = route.params;
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
+  const { swiperStateChange, userDetails, uid } = route.params;
   return (
     <FeedStack.Navigator
       initialRouteName="FeedScreen"
@@ -93,65 +97,316 @@ function FeedStackScreen({ navigation, route }) {
           // title: "Full Image",
         }}
       />
+      <FeedStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        initialParams={{ swiperStateChange: swiperStateChange }}
+        options={{
+          headerShown: false,
+        }}
+      />
     </FeedStack.Navigator>
   );
 }
 
-function FeedTabNavigatorScreen({ route }) {
-  const { userDetails, uid } = route.params;
+function SearchStackScreen({ navigation, route }) {
+  const { swiperStateChange, userDetails, uid } = route.params;
   return (
-    <Tab.Navigator
-      initialRouteName="Feed"
-      tabBarOptions={{
-        activeTintColor: colors.maroon,
-        inactiveTintColor: colors.black,
-        showLabel: false,
-      }}
-      style={{ backgroundColor: colors.grey }}
-    >
-      <Tab.Screen
-        name="Camera"
-        component={AccountScreen}
-        initialParams={{ userDetails: userDetails, uid: uid }}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="camera" color={color} size={32} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Feed"
-        component={FeedStackScreen}
-        initialParams={{ userDetails: userDetails, uid: uid }}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <EntypoIcon name="home" color={color} size={32} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Notifications"
-        component={AccountScreen}
-        initialParams={{ userDetails: userDetails, uid: uid }}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <EntypoIcon name="notification" color={color} size={30} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Search"
+    <SearchStack.Navigator initialRouteName="SearchScreen">
+      <SearchStack.Screen
+        name="SearchScreen"
         component={SearchScreen}
+        initialParams={{ uid: uid }}
         options={{
-          // tabBarVisible: false,
-          tabBarIcon: ({ color }) => (
-            <Icon name="search" color={color} size={30} />
-          ),
+          headerShown: false,
+          // headerStyle: { backgroundColor: "black" },
+          // title: "Full Image",
         }}
       />
-    </Tab.Navigator>
+      <SearchStack.Screen
+        name="FullDuetScreen"
+        component={FullDuetScreen}
+        options={{
+          headerShown: false,
+          // headerStyle: { backgroundColor: "black" },
+          // title: "Full Image",
+        }}
+      />
+      <SearchStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        initialParams={{ swiperStateChange: swiperStateChange }}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </SearchStack.Navigator>
   );
 }
+
+// function NotificationStackScreen({ navigation, route, propsObj }) {
+//   const { swiperStateChange, userDetails, uid, tabClick } = route.params;
+//   return (
+//     <NotificationStack.Navigator initialRouteName="NotificationScreen">
+//       <NotificationStack.Screen
+//         name="NotificationScreen"
+//         // component={NotificationScreen}
+//         initialParams={{
+//           uid: uid,
+//           tabClick: tabClick,
+//         }}
+//         options={{
+//           headerShown: true,
+//           title: "Notifications",
+//           headerTitleStyle: {
+//             textAlign: "center",
+//             flex: 1,
+//             fontSize: 16,
+//           },
+//         }}
+//       >
+//         {(props) => <NotificationScreen {...props} {...propsObj} />}
+//       </NotificationStack.Screen>
+//     </NotificationStack.Navigator>
+//   );
+// }
+
+class NotificationStackScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      swiperStateChange: this.props.route.params.swiperStateChange,
+      userDetails: this.props.route.params.userDetails,
+      uid: this.props.route.params.uid,
+      tabClick: this.props.tabClick,
+    };
+  }
+
+  render() {
+    return (
+      <NotificationStack.Navigator initialRouteName="NotificationScreen">
+        <NotificationStack.Screen
+          name="NotificationScreen"
+          // component={NotificationScreen}
+          initialParams={{
+            uid: this.state.uid,
+          }}
+          options={{
+            headerShown: true,
+            title: "Notifications",
+            headerTitleStyle: {
+              textAlign: "center",
+              flex: 1,
+              fontSize: 16,
+            },
+          }}
+        >
+          {(props) => <NotificationScreen {...props} {...this.props} />}
+        </NotificationStack.Screen>
+      </NotificationStack.Navigator>
+    );
+  }
+}
+
+class FeedTabNavigatorScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      swiperStateChange: this.props.route.params.swiperStateChange,
+      userDetails: this.props.route.params.userDetails,
+      uid: this.props.route.params.uid,
+      tabClick: false,
+    };
+  }
+
+  render() {
+    const propsObj = {
+      ...this.props,
+      tabClick: this.state.tabClick,
+    };
+    return (
+      <Tab.Navigator
+        initialRouteName="Feed"
+        backBehavior="none"
+        tabBarOptions={{
+          activeTintColor: colors.maroon,
+          inactiveTintColor: colors.black,
+          showLabel: false,
+        }}
+        style={{ backgroundColor: colors.grey }}
+      >
+        <Tab.Screen
+          name="Camera"
+          component={AccountScreen}
+          initialParams={{
+            userDetails: this.state.userDetails,
+            uid: this.state.uid,
+          }}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="camera" color={color} size={32} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Feed"
+          component={FeedStackScreen}
+          initialParams={{
+            swiperStateChange: this.state.swiperStateChange,
+            userDetails: this.state.userDetails,
+            uid: this.state.uid,
+          }}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <EntypoIcon name="home" color={color} size={32} />
+            ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+              this.state.swiperStateChange(true);
+              this.setState({ tabClick: false });
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          initialParams={{
+            swiperStateChange: this.state.swiperStateChange,
+            userDetails: this.state.userDetails,
+            uid: this.state.uid,
+          }}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <EntypoIcon
+                name="notification"
+                color={this.state.newNotification ? colors.red : color}
+                size={30}
+              />
+            ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+              this.state.swiperStateChange(false);
+              this.setState({ tabClick: true });
+            },
+          }}
+        >
+          {(props) => <NotificationStackScreen {...props} {...propsObj} />}
+        </Tab.Screen>
+        <Tab.Screen
+          name="Search"
+          component={SearchStackScreen}
+          initialParams={{
+            swiperStateChange: this.state.swiperStateChange,
+            uid: this.state.uid,
+          }}
+          options={{
+            // tabBarVisible: false,
+            tabBarIcon: ({ color }) => (
+              <Icon name="search" color={color} size={30} />
+            ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+              this.state.swiperStateChange(false);
+              this.setState({ tabClick: false });
+            },
+          }}
+        />
+      </Tab.Navigator>
+    );
+  }
+}
+
+// function FeedTabNavigatorScreen({ route }) {
+//   const { swiperStateChange, userDetails, uid, newNotification } = route.params;
+
+//   console.log("here2", newNotification);
+//   // if(route.state && route.state.index === 1){
+//   //   swiperStateChange(true);
+//   // }
+
+//   return (
+//     <Tab.Navigator
+//       initialRouteName="Feed"
+//       tabBarOptions={{
+//         activeTintColor: colors.maroon,
+//         inactiveTintColor: colors.black,
+//         showLabel: false,
+//       }}
+//       style={{ backgroundColor: colors.grey }}
+//     >
+//       <Tab.Screen
+//         name="Camera"
+//         component={AccountScreen}
+//         initialParams={{ userDetails: userDetails, uid: uid }}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name="camera" color={color} size={32} />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Feed"
+//         component={FeedStackScreen}
+//         initialParams={{
+//           swiperStateChange: swiperStateChange,
+//           userDetails: userDetails,
+//           uid: uid,
+//         }}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <EntypoIcon name="home" color={color} size={32} />
+//           ),
+//         }}
+//         listeners={{
+//           tabPress: (e) => {
+//             // Prevent default action
+//             swiperStateChange(true);
+//           },
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Notifications"
+//         component={NotificationStackScreen}
+//         initialParams={{
+//           swiperStateChange: swiperStateChange,
+//           userDetails: userDetails,
+//           uid: uid,
+//         }}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <EntypoIcon
+//               name="notification"
+//               color={newNotification ? "yellow" : color}
+//               size={30}
+//             />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Search"
+//         component={SearchStackScreen}
+//         initialParams={{ swiperStateChange: swiperStateChange, uid: uid }}
+//         options={{
+//           // tabBarVisible: false,
+//           tabBarIcon: ({ color }) => (
+//             <Icon name="search" color={color} size={30} />
+//           ),
+//         }}
+//         listeners={{
+//           tabPress: (e) => {
+//             // Prevent default action
+//             swiperStateChange(false);
+//           },
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// }
 
 class FeedScreenWrapper extends React.Component {
   constructor(props) {
@@ -205,6 +460,7 @@ class FeedScreenWrapper extends React.Component {
             name="FeedScreen"
             component={FeedTabNavigatorScreen}
             initialParams={{
+              swiperStateChange: this.props.swiperStateChange,
               userDetails: this.state.userDetails,
               uid: this.props.uid,
             }}

@@ -5,6 +5,7 @@ import { View, Image, TouchableOpacity, Dimensions } from "react-native";
 
 import ProfileScreen from "../../ProfileScreen";
 import EditProfileScreen from "../../EditProfileScreen";
+import FullDuetScreen from "../../FeedScreen/FullDuetScreen";
 
 import { AppLoading } from "expo";
 
@@ -77,6 +78,15 @@ class ProfileScreenWrapper extends React.Component {
           <ProfileStack.Screen
             name="EditProfileScreen"
             component={EditProfileScreen}
+          />
+          <ProfileStack.Screen
+            name="FullDuetScreen"
+            component={FullDuetScreen}
+            options={{
+              headerShown: false,
+              // headerStyle: { backgroundColor: "black" },
+              // title: "Full Image",
+            }}
           />
         </ProfileStack.Navigator>
       </NavigationContainer>

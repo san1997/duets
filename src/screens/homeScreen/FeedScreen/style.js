@@ -65,8 +65,8 @@ export const feedPageStyles = StyleSheet.create({
   },
   duetUploadTimeStyle: {
     fontFamily: fonts.regular_text,
-    color: colors.blackTimeColor,
-    fontSize: 13.5,
+    color: colors.blackForTimer,
+    fontSize: 13,
     marginLeft: 5,
   },
   singleDuetOptionIcon: { top: 10 , marginRight: 16},

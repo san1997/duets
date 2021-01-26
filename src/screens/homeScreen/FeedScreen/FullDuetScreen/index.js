@@ -1,6 +1,7 @@
 import React from "react";
-import { SafeAreaView, View, Image } from "react-native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView, View, Image, BackHandler, Alert } from "react-native";
+import { FlatList, ScrollView} from "react-native-gesture-handler";
+import { CommonActions } from '@react-navigation/native';
 
 import { fullDuetScreenStyles } from "./style.js";
 
@@ -20,6 +21,19 @@ class FullDuetScreen extends React.Component {
       </View>
     );
   };
+
+  backAction = () => {
+    this.props.navigation.dispatch(CommonActions.goBack());
+    return true;
+  };
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
 
   render() {
     return (

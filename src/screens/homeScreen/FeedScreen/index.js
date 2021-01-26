@@ -46,6 +46,15 @@ class FeedScreen extends React.PureComponent {
     });
   }
 
+  switchToProfileFeedStacks(user_uid, profile_uid) {
+    this.props.navigation.navigate("ProfileScreen", {
+      navigationFromFeed: true,
+      profile_uid: profile_uid ? profile_uid : user_uid, // change it to only profile_uid after once each duet has user_id
+      users_uid: user_uid,
+      isUsersProfile: profile_uid == user_uid,
+    });
+  }
+
   componentDidMount() {
     // this.setState({ isLoading: false }, this.getData);
     this.setState({ isLoading: false }, this.getDataFromFirebase);
@@ -181,10 +190,16 @@ class FeedScreen extends React.PureComponent {
           </View>
 
           <View style={feedPageStyles.userNameContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.switchToProfileFeedStacks(this.state.uid, item.userId)
+              }
+            >
               <Text style={feedPageStyles.userNameStyle}>{item.userName}</Text>
             </TouchableOpacity>
-            <Text style={feedPageStyles.duetUploadTimeStyle}>10h</Text>
+            <Text style={feedPageStyles.duetUploadTimeStyle}>
+              {item.uploadTime}
+            </Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
             <TouchableOpacity style={[feedPageStyles.singleDuetOptionIcon]}>
