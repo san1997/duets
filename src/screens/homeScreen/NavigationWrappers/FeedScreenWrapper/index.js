@@ -454,7 +454,7 @@ class FeedScreenWrapper extends React.Component {
           drawerContentOptions={{
             userDetails: this.state.userDetails,
           }}
-          drawerContent={(props) => <DrawerContent {...props} />}
+          drawerContent={(props) => <DrawerContent {...props} {...this.props}/>}
         >
           <Drawer.Screen
             name="FeedScreen"

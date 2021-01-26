@@ -61,7 +61,7 @@ class LoginPage extends React.Component {
 
           <View style={loginStyles.loginFormContainer}>
             <TextInput
-              placeholder={"Enter Mobile/ Email Id"}
+              placeholder={"Enter Email Id"}
               placeholderTextColor={colors.textLightColor}
               keyboardType="email-address"
               onChangeText={(inputText) => {

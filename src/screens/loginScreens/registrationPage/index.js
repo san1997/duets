@@ -135,7 +135,7 @@ class RegistrationPage extends React.Component {
 
           <View style={registrationPageStyles.formContainer}>
             <TextInput
-              placeholder={"Email id/ Phone no."}
+              placeholder={"Email id"}
               placeholderTextColor={colors.textLightColor}
               underlineColorAndroid="transparent"
               style={registrationPageStyles.loginForminput}
