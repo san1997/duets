@@ -19,9 +19,19 @@ class FirstPage extends React.Component {
       userId,
     });
   };
+  logoutUser = () => {
+    console.log('user is logged out');
+    this.setState({
+      loggedIn: false,
+      userId: null
+    })
+  };
   render() {
     return this.state.loggedIn ? (
-      <HomeScreen uid={this.state.userId} />
+      <HomeScreen
+        uid={this.state.userId}
+        logoutUser={this.logoutUser}
+      />
     ) : (
       <LoginPage
         navigation={this.props.navigation}

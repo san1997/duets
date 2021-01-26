@@ -138,7 +138,7 @@ export function DrawerContent(props) {
           //   signOut();
           // }}
           onPress={() => {
-            props.navigation.closeDrawer();
+            props.logoutUser();
           }}
           labelStyle={[drawerContentStyles.drawerTextStyle]}
         />

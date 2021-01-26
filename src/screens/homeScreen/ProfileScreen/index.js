@@ -26,6 +26,7 @@ import colors from "../../../constConfig/colors";
 import images from "../../../constConfig/images";
 import strings from "../../../constConfig/strings";
 import CacheImage from "../../../constConfig/cacheImage";
+import PopupMenu from "../../../../components/dropdownOptions";
 
 import { profilePageStyles } from "./style.js";
 
@@ -355,6 +356,39 @@ class ProfileScreen extends React.Component {
       .catch((error) => console.error(error));
   }
 
+  removeDuet(item) {
+    const url = `${SERVER}/duets-delete`;
+    const data = {
+      id: item.duetId,
+      uid: item.userId
+    };
+    const options = {
+      method: "DELETE",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(url, options)
+      .then((response) => response.json())
+      .then((res) => {
+        // do nothing, it just a success response
+      })
+      .catch((error) => console.error(error));
+  }
+
+  onPopupEvent = (eventName, index, item, duetInd) => {
+    if (eventName !== 'itemSelected') return
+    if (index === 0) { // Removing duet
+      const duetList = this.state.data;
+      console.log('duets earlier', duetList);
+      duetList.splice(duetInd, 1);
+      console.log('after delete', duetList);
+      this.setState({data: duetList});
+      this.removeDuet(item);
+    }
+  }
+
   renderDuet = ({ item, index }) => {
     return index == 0 ? (
       <View style={profilePageStyles.uploadContainer}>
@@ -397,9 +431,7 @@ class ProfileScreen extends React.Component {
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row-reverse" }}>
-            <TouchableOpacity style={[profilePageStyles.singleDuetOptionIcon]}>
-              <Icon name="more-horizontal" color={colors.black} size={30} />
-            </TouchableOpacity>
+            <PopupMenu actions={['Remove']} onPress={(a, b) => this.onPopupEvent(a, b, item, index)}/>
           </View>
         </View>
         <View

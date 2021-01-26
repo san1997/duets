@@ -45,6 +45,7 @@ class HomeScreen extends React.Component {
         <FeedScreenWrapper
           uid={this.props.uid}
           swiperStateChange={this.swiperStateChange}
+          logoutUser={this.props.logoutUser}
         />
         <ProfileScreenWrapper
           users_uid={this.props.uid}
