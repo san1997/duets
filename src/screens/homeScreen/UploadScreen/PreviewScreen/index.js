@@ -11,7 +11,7 @@ class PreviewScreen extends Component {
     const images = this.props.route.params.images && this.props.route.params.images.length;
     return (
       <Text style={PreviewScreenStyles.heading}>
-        { images ? 'Second Upload' : 'First Upload' }
+        { images % 2 ? 'Second Upload' : 'First Upload' }
       </Text>
     );
   }
@@ -23,7 +23,7 @@ class PreviewScreen extends Component {
           onPress={() => {
             this.props.route.params.addImageToDuet(this.props.route.params.data)
           }}>
-          <AntDesign name="checkcircle" size={60} color="#84de02" />
+          <AntDesign name="checkcircle" size={60} color="#84ee02" />
         </TouchableOpacity>
     );
   }

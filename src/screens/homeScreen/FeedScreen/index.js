@@ -19,6 +19,7 @@ import colors from "../../../constConfig/colors";
 import CacheImage from "../../../constConfig/cacheImage";
 
 import { feedPageStyles } from "./style.js";
+import PopupMenu from "../../../../components/dropdownOptions";
 
 import { SERVER } from "../../../constConfig/config";
 import queryString from "query-string";
@@ -36,6 +37,7 @@ class FeedScreen extends React.PureComponent {
       uid: this.props ? this.props.route.params.uid : 0,
       refresh: !refresh,
       isRefreshing: false,
+      icon: null,
     };
   }
 
@@ -170,7 +172,44 @@ class FeedScreen extends React.PureComponent {
       .catch((error) => console.error(error));
   }
 
+  removeDuet(item) {
+    const url = `${SERVER}/duets-delete`;
+    const data = {
+      id: item.duetId,
+      uid: item.userId
+    };
+    const options = {
+      method: "DELETE",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(url, options)
+      .then((response) => response.json())
+      .then((res) => {
+        // do nothing, it just a success response
+      })
+      .catch((error) => console.error(error));
+  }
+
+  onPopupEvent = (eventName, index, item) => {
+    if (eventName !== 'itemSelected') return
+    if (index === 0) { // Removing duet
+      item.deleted = true;
+      this.removeDuet(item);
+    }
+  }
+
   renderDuet = ({ item, index }) => {
+    let moreActions = [];
+    console.log('aaaa', item.userId, this.state.uid);
+    if (item.userId === this.state.uid) {
+      moreActions.push('Remove');
+    }
+    if (item.deleted) {
+      return null;
+    }
     return (
       <View style={feedPageStyles.singleDuetStyle}>
         <View
@@ -201,11 +240,9 @@ class FeedScreen extends React.PureComponent {
               {item.uploadTime}
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: "row-reverse" }}>
-            <TouchableOpacity style={[feedPageStyles.singleDuetOptionIcon]}>
-              <Icon name="more-horizontal" color={colors.black} size={30} />
-            </TouchableOpacity>
-          </View>
+          {false && <View style={{ flex: 1, flexDirection: "row-reverse" }}>
+            <PopupMenu actions={moreActions} onPress={(a, b) => this.onPopupEvent(a, b, item)}/>
+          </View>}
         </View>
         <View
           style={[feedPageStyles.flex_row, feedPageStyles.singleDuetContainer]}
@@ -331,7 +368,7 @@ class FeedScreen extends React.PureComponent {
             onEndReachedThreshold={2}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
-            /* we can automate refresh icons using RefreshControl 
+            /* we can automate refresh icons using RefreshControl
             Refer - https://medium.com/enappd/refreshcontrol-pull-to-refresh-in-react-native-apps-dfe779118f75 */
             refreshControl={
               <RefreshControl

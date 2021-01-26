@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, TouchableOpacity, TextInput, Image, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import queryString from 'query-string';
 
 import { DuetPreviewStyles } from "./style";
 
@@ -32,6 +33,28 @@ class DuetPreview extends Component {
       caption: ''
     };
   }
+
+  componentDidMount() {
+    this.fetchUserDetails();
+  }
+
+  fetchUserDetails() {
+    console.log('fetching user details', this.props);
+    const queryObj = {
+      userId: this.props.route.params.uid
+    }
+    const url = `${SERVER}/user-details?${queryString.stringify(queryObj)}` ;
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ userDetails: json });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
+
   uploadDuet() {
     const images = this.props.route.params.images;
     const url = `${SERVER}/duets-upload`;
@@ -200,7 +223,9 @@ class DuetPreview extends Component {
   }
 
   renderDuetNumber() {
-    const previousDuets = this.props.route.params.userDetails.duets.length;
+    const previousDuets = this.state.userDetails && this.state.userDetails.duets.length;
+    if (!previousDuets)
+      return null;
     const number = previousDuets + 1;
     let superScript = "th";
     if (number % 10 === 1) {
