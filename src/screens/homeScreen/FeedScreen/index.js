@@ -176,7 +176,7 @@ class FeedScreen extends React.PureComponent {
     const url = `${SERVER}/duets-delete`;
     const data = {
       id: item.duetId,
-      uid: item.userId
+      uid: item.userId,
     };
     const options = {
       method: "DELETE",
@@ -194,18 +194,19 @@ class FeedScreen extends React.PureComponent {
   }
 
   onPopupEvent = (eventName, index, item) => {
-    if (eventName !== 'itemSelected') return
-    if (index === 0) { // Removing duet
+    if (eventName !== "itemSelected") return;
+    if (index === 0) {
+      // Removing duet
       item.deleted = true;
       this.removeDuet(item);
     }
-  }
+  };
 
   renderDuet = ({ item, index }) => {
     let moreActions = [];
-    console.log('aaaa', item.userId, this.state.uid);
+    console.log("aaaa", item.userId, this.state.uid);
     if (item.userId === this.state.uid) {
-      moreActions.push('Remove');
+      moreActions.push("Remove");
     }
     if (item.deleted) {
       return null;
@@ -221,7 +222,7 @@ class FeedScreen extends React.PureComponent {
                 source={{
                   uri: item.profilePicture
                     ? item.profilePicture
-                    : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                    : "https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-logo-02.png?alt=media&token=854cdad3-3578-4494-9758-c554ca386e7f",
                 }}
                 style={feedPageStyles.userThumbnail}
               />
@@ -240,9 +241,14 @@ class FeedScreen extends React.PureComponent {
               {item.uploadTime}
             </Text>
           </View>
-          {false && <View style={{ flex: 1, flexDirection: "row-reverse" }}>
-            <PopupMenu actions={moreActions} onPress={(a, b) => this.onPopupEvent(a, b, item)}/>
-          </View>}
+          {false && (
+            <View style={{ flex: 1, flexDirection: "row-reverse" }}>
+              <PopupMenu
+                actions={moreActions}
+                onPress={(a, b) => this.onPopupEvent(a, b, item)}
+              />
+            </View>
+          )}
         </View>
         <View
           style={[feedPageStyles.flex_row, feedPageStyles.singleDuetContainer]}

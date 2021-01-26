@@ -54,7 +54,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <CacheImage
           style={styles.image}
-          uri="https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg"
+          uri="https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-logo-02.png?alt=media&token=854cdad3-3578-4494-9758-c554ca386e7f"
         />
       </View>
     );

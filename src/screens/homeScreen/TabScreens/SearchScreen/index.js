@@ -46,9 +46,9 @@ class SearchScreen extends React.Component {
   switchToProfileFeedStacks(user_uid, profile_uid) {
     this.props.navigation.navigate("ProfileScreen", {
       navigationFromFeed: true,
-      profile_uid: profile_uid ? profile_uid: user_uid, // change it to only profile_uid after once each duet has user_id
+      profile_uid: profile_uid ? profile_uid : user_uid, // change it to only profile_uid after once each duet has user_id
       users_uid: user_uid,
-      isUsersProfile: (profile_uid == user_uid)
+      isUsersProfile: profile_uid == user_uid,
     });
   }
 
@@ -123,7 +123,8 @@ class SearchScreen extends React.Component {
     //   );
     // }
     return (
-      <TouchableOpacity style={{ flex: 1 }}
+      <TouchableOpacity
+        style={{ flex: 1 }}
         onPress={() => this.switchToProfileFeedStacks(this.state.uid, item.uid)}
       >
         <View style={searchScreenStyles.flex_row}>
@@ -132,7 +133,7 @@ class SearchScreen extends React.Component {
               source={{
                 uri: item.profilePicture
                   ? item.profilePicture
-                  : "https://i.pinimg.com/474x/b7/a3/43/b7a3434f363c38d73611694b020a503e.jpg",
+                  : "https://firebasestorage.googleapis.com/v0/b/duets-app-a40c0.appspot.com/o/logo%2FDuets-logo-02.png?alt=media&token=854cdad3-3578-4494-9758-c554ca386e7f",
               }}
               style={searchScreenStyles.userThumbnail}
             />
@@ -163,7 +164,7 @@ class SearchScreen extends React.Component {
               <Image
                 style={{
                   resizeMode: "contain",
-                  width: 45,
+                  width: 50,
                 }}
                 source={logoImage}
               />
