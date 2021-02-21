@@ -151,7 +151,7 @@ class DuetPreview extends Component {
               this.props.navigation.goBack();
             }}
           >
-            <Ionicons name="ios-arrow-round-back" size={50} color="black" />
+            <Ionicons name="arrow-back-outline" size={40} color="black" />
           </TouchableOpacity>
           <View style={DuetPreviewStyles.heading}>
             <Text style={DuetPreviewStyles.fontHeading}>

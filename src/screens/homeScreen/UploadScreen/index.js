@@ -60,7 +60,7 @@ class UploadScreen extends Component {
               : Camera.Constants.Type.back
           });
         }}>
-        <Ionicons name="ios-reverse-camera" size={50} color="white" />
+        <Ionicons name="camera-reverse-outline" size={50} color="white" />
       </TouchableOpacity>
     );
   }
