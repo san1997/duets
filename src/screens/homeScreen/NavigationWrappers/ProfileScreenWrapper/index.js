@@ -7,7 +7,7 @@ import ProfileScreen from "../../ProfileScreen";
 import EditProfileScreen from "../../EditProfileScreen";
 import FullDuetScreen from "../../FeedScreen/FullDuetScreen";
 
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading';
 
 import queryString from "query-string";
 import { SERVER } from "../../../../constConfig/config";

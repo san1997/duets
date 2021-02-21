@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from "react-native";
 
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading';
 import { notificationScreenStyle } from "./style.js";
 import CacheImage from "../../../../constConfig/cacheImage";
 
@@ -145,7 +145,7 @@ class NotificationScreen extends React.Component {
             ListEmptyComponent={this._listEmptyComponent}
             onEndReached={this.feedMoreHandling}
             ListFooterComponent={this.renderLoadMore}
-            /* we can automate refresh icons using RefreshControl 
+            /* we can automate refresh icons using RefreshControl
           Refer - https://medium.com/enappd/refreshcontrol-pull-to-refresh-in-react-native-apps-dfe779118f75 */
             refreshControl={
               <RefreshControl

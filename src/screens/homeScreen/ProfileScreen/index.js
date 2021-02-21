@@ -12,7 +12,7 @@ import {
   BackHandler,
   Alert,
 } from "react-native";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading';
 import { useScrollToTop } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import AntIcon from "react-native-vector-icons/AntDesign";

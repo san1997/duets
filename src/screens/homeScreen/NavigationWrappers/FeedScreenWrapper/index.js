@@ -9,7 +9,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import Icon from "react-native-vector-icons/Feather";
 
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading';
 
 import { feedScreenWrapperStyles } from "./style.js";
 import colors from "../../../../constConfig/colors";

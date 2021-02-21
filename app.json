@@ -20,7 +20,6 @@
     "android": {
       "package": "com.duetsapp.duets",
       "versionCode": 1,
-      "permissions": [],
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan"
     }
