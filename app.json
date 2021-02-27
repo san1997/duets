@@ -1,15 +1,10 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Duets",
+    "slug": "Duets",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
-    "splash": {
-      "image": "./src/assets/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,8 +18,9 @@
       "favicon": "./src/assets/favicon.png"
     },
     "android": {
-      "package": "com.duetsapp.expo",
+      "package": "com.duetsapp.duets",
       "versionCode": 1,
+      "permissions": [],
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan"
     }

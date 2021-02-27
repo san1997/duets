@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import FlashMessage from "react-native-flash-message";
 
 import * as Font from "expo-font";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading';
 
 import * as firebase from "firebase";
 
