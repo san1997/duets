@@ -12,7 +12,7 @@ import {
   BackHandler,
   Alert,
 } from "react-native";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 import { useScrollToTop } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -431,12 +431,14 @@ class ProfileScreen extends React.Component {
               {item.uploadTime}
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: "row-reverse" }}>
-            <PopupMenu
-              actions={["Remove"]}
-              onPress={(a, b) => this.onPopupEvent(a, b, item, index)}
-            />
-          </View>
+          {this.state.isUsersProfile ? (
+            <View style={{ flex: 1, flexDirection: "row-reverse" }}>
+              <PopupMenu
+                actions={["Remove"]}
+                onPress={(a, b) => this.onPopupEvent(a, b, item, index)}
+              />
+            </View>
+          ) : null}
         </View>
         <View
           style={[
@@ -639,7 +641,7 @@ class ProfileScreen extends React.Component {
           <View style={profilePageStyles.infoBoxWrapper}>
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={() => this.flatListRef.scrollToIndex({ index: 0 })}
+              onPress={() => this.myRef.current.scrollToIndex({ index: 0 })}
             >
               <View style={profilePageStyles.infoBox}>
                 <Title style={profilePageStyles.infoBoxNumbers}>

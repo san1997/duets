@@ -23,6 +23,8 @@ export default {
   editProfile: "Edit Profile",
   goString: "Go with",
   selectedUserId: "This User Id has been taken.",
+  notStandardUserIdMessage:
+    "User Id must contain only lowercase letters, numbers, and underscores",
   selectedUserIdProfile:
     "User Id has already been taken. You can select a different User Id. We are almost there...",
   follow: "Follow",

@@ -69,6 +69,7 @@ class RegistrationPage extends React.Component {
           this.props.navigation.dispatch(CommonActions.goBack());
           this.props.navigation.goBack(null);
         } else {
+          this.showAlertMessage(res.error);
         }
       })
       .catch((err) => {
