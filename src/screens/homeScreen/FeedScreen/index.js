@@ -204,7 +204,6 @@ class FeedScreen extends React.PureComponent {
 
   renderDuet = ({ item, index }) => {
     let moreActions = [];
-    console.log("aaaa", item.userId, this.state.uid);
     if (item.userId === this.state.uid) {
       moreActions.push("Remove");
     }

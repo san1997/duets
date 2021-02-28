@@ -46,6 +46,8 @@ class UserIdConfirmation extends React.Component {
   async handleSignup() {
     var newUser = false;
     var trueString = "true";
+    var notStandard = "notStandard";
+
     const queryObj = {
       userId: this.state.userId,
     };
@@ -57,8 +59,10 @@ class UserIdConfirmation extends React.Component {
       })
       .catch((error) => console.error(error));
 
-    if (!(trueString == newUser)) {
-      console.log("old enter");
+    if (notStandard === newUser) {
+      this.showAlertMessage(strings.notStandardUserIdMessage);
+      return;
+    } else if (!(trueString == newUser)) {
       this.showAlertMessage(strings.selectedUserId);
       return;
     }
